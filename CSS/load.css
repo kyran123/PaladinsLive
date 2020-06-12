@@ -1,0 +1,102 @@
+@font-face {
+    font-family: "Cornerstone";
+    src: url("../Assets/Fonts/cornerstone/Cornerstone.ttf");
+    src: url("../Assets/Fonts/cornerstone/cornerstone-webfont.woff") format("woff");
+}
+@font-face {
+    font-family: "Raleway";
+    src: url("../Assets/Fonts/Raleway/Raleway-Regular.ttf");
+}
+
+/*
+ * Primary color: #1a1a1d
+ * Secundary color: #41413F
+ * Accent 1 color: #DF775C
+ * Accent 2 color: #846A59
+ * Text color: #F3E7C7
+*/
+
+html {
+    margin:                     0;
+    padding:                    0;
+    width:                      100vw;
+    height:                     100vh;
+}
+body {
+    width:                      100vw;
+    height:                     100vh;
+    background-color:           #1a1a1d;
+    display:                    grid;
+    grid-template-rows:         1fr 10vh 1fr;
+    width:                      30vw;
+    margin:                     auto;
+    padding:                    0;
+}
+.hidden {
+    display:                    none !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+#centeredLogo {
+    width:                      100%;
+    height:                     100%;
+    font-size:                  1.5em;
+    font-family:                Cornerstone;
+    color:                      #F3E7C7;
+    font-weight:                500;
+    text-align:                 center;
+}
+#setupContainer {
+    position:                   fixed;
+    background:                 #1a1a1d;
+    top:                        0;
+    left:                       0;
+    width:                      100vw;
+    height:                     100vh;
+    
+    display:                    grid;
+    grid-template-columns:      60vw;
+    grid-template-rows:         repeat(4, 10vh) 15vh;
+    
+    padding-left:               20vw;
+    padding-right:              20vw;
+    padding-top:                20vh;
+    padding-bottom:             25vh;
+}
+#setupContainer input {
+    background:                 #111111;
+    border:                     none;
+    color:                      #dddddd;
+    padding-left:               5px;
+    padding-right:              5px;
+}
+#setupContainer input:focus {
+    outline:                    none;
+}
+#setupContainer span {
+    font-family:                Raleway;
+    font-size:                  0.9em;
+    color:                      #dddddd;
+    margin-top:                 15px;
+}
+#setupContainer div {
+    margin-top:                 15px;
+    background:                 #DF775C;
+    font-family:                Raleway;
+    font-weight:                bold;
+    text-align:                 center;
+    align-self:                 center;
+    padding:                    5px;
+}
+#submitBtn:hover {
+    cursor: pointer;
+    background:                 #e05c3b;
+}
