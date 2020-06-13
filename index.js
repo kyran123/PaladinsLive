@@ -114,12 +114,13 @@ function loadProgramRequirements() {
 function showMainScreen() {
 	//Create new window for the main screen
 	mainWindow = new BrowserWindow({
-		width: screen.bounds.width,
-		height: screen.bounds.height,
+		width: (screen.bounds.width / 2),
+		height: (screen.bounds.height / 2),
 		frame: false,
 		fullscreenable: true,
 		resizable: true,
 		show: false,
+		backgroundColor: '#1a1a1d',
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: true,

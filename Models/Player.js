@@ -53,12 +53,7 @@ module.exports = class Player {
 
         //Champion variables
         this.championId = (champion_id == null) ? 0 : champion_id;
-        this.championName = (champion_name == null) ? "Hidden" : champion_name;
-
-        //Other variables
-        this.queueId = queue_id;
-        this.queueName = 0;
-        this.map = map_name;
+        this.championName = (champion_name == null) ? "" : champion_name;
 
         //create variables
         this.rank = 0;

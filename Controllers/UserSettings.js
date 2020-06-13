@@ -1,4 +1,4 @@
-const settings = require('electron-settings');
+const settings = require('electron-settings').default;
 
 class userSettings {
     //Initialize for use

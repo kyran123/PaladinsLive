@@ -1,12 +1,10 @@
 const axios = require('axios');
 const moment = require('moment');
 const md5 = require('md5');
-const { promises } = require('fs');
-const { resolveSoa } = require('dns');
-const { session } = require('electron');
 
 let Match = require('../Models/Match.js');
 let Player = require('../Models/Player.js');
+const { nextTick } = require('process');
 
 class PaladinsAPI {
     constructor() {
@@ -46,9 +44,9 @@ class PaladinsAPI {
         });
     }
     //Gets the latest session IF NEEDED
-    getSessionIfNeeded() {
+    async getSessionIfNeeded() {
         //Check if there is an session stored and is correct
-        const response = this.isSessionValid().catch((err) => { console.log("[PaladinsAPI.js]:getSessionIfNeeded() error: " + err); });
+        const response = await this.isSessionValid().catch((err) => { console.log("[PaladinsAPI.js]:getSessionIfNeeded() error: " + err); });
         if(!response.result) {
             //Session is not valid
             //Create new session
@@ -60,7 +58,7 @@ class PaladinsAPI {
     }
     //Get signature needed for the requests
     getSignature(method) {
-        return md5('2497' + method + '02D4F4F24F994280A60F4417C3764288' + timeStamp());
+        return md5(`${this.user.devId}${method}${this.user.authKey}${this.timeStamp()}`);
     }
     //Gets the current time stamp
     timeStamp() {
@@ -74,7 +72,7 @@ class PaladinsAPI {
     // 4) Get the player queue stats (casual & ranked) with the said champion
 
     //Get actual paladins data
-    getLiveMatchData(playerId, callback) {
+    async getLiveMatchData(playerId, callback) {
 
         //Get the player status
         const status = axios.get(`${this.apiLink}/${this.methods.playerStatus}/${this.user.devId}/${this.getSignature('getplayerstatus')}/${this.session}/${this.timeStamp()}/${playerId}`)
@@ -82,7 +80,10 @@ class PaladinsAPI {
         const matchId = status.data[0].Match;
         if(matchId === 0) callback({ result: false, msg: "No match found" });
         //Create new match object
-        this.match = new Match();
+        this.match = new Match(
+            playerInfo.Queue, 
+            playerInfo.mapGame
+        );
         //Now that we have the match id
 
         //Get the live match stats
@@ -96,7 +97,7 @@ class PaladinsAPI {
     }
     
     //Get actual player information
-    getPlayerData(playerInfo, index) {
+    async getPlayerData(playerInfo, index) {
         //Create new player object
         //Add player object to the match player list
         const playerObj = this.match.addPlayer(new Player(
@@ -106,13 +107,11 @@ class PaladinsAPI {
             playerInfo.Account_Level, 
             playerInfo.taskForce,
             playerInfo.ChampionId, 
-            playerInfo.ChampionName, 
-            playerInfo.Queue, 
-            playerInfo.mapGame
+            playerInfo.ChampionName
         ));
 
         //Get the player rank
-        const player = axios.get(`${this.apiLink}/${this.methods.player}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
+        const player = axios.get(`${this.apiLink}/${this.methods.player}/${this.user.devId}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
                                 .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get player - error: " + err); });
         //Get the player data in a JS object
         const PlayerJSobject = JSON.parse(player.data[0]);
@@ -159,6 +158,44 @@ class PaladinsAPI {
             );
         }
 
+        //Get casual queue stat for player
+        const casual  = axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/424`)
+                             .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get casual queue stats - error: " + err); });
+        const casualChampions = JSON.parse(casual.data);
+        casualChampions.forEach((champion) => {
+            //check if data is for the champion the user has chosen
+            if(champion.ChampionId === playerObj.id) {
+                //Only called once we found the right champion
+                playerObj.setPlayerCasualChampion(
+                    champion.Assists,
+                    champion.Kills,
+                    champion.Deaths,
+                    champion.Losses,
+                    champion.Wins,
+                    champion.Matches,
+                    champion.Gold
+                );
+            }
+        });
+        
+
+        //Get ranked queue stat for player
+        const ranked = axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/424`)
+                            .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get ranked queue stats - error: " + err); });
+        const rankedChampions = JSON.parse(ranked.data);
+        //check if data is for the champion the user has chosen
+        if(champion.ChampionId === playerObj.id) {
+            //Only called once we found the right champion
+            playerObj.setPlayerRankedChampion(
+                champion.Assists,
+                champion.Kills,
+                champion.Deaths,
+                champion.Losses,
+                champion.Wins,
+                champion.Matches,
+                champion.Gold
+            );
+        }
     }
 }
 
