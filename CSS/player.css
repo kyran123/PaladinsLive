@@ -1,0 +1,419 @@
+.teamContainer {
+    width:                  100%;
+    height:                 100%;
+    display:                grid;
+    grid-template-rows:     repeat(5, calc(20% - 1vw));
+    grid-row-gap:           1vw;
+}
+@media only screen and (max-width: 950px) {
+    .teamContainer {
+        grid-template-rows: repeat(5, 1fr);
+        margin-bottom: 25px;
+    }
+}
+
+
+.playerContainer {
+    background: linear-gradient(#27272B 50%, #303036 50%);
+    padding: 2%;
+    display: grid;
+    grid-template-areas: 'img player'
+                         'img champion';
+    grid-template-columns: 30% 1fr;
+    grid-template-rows: 1fr 1fr;
+    color: #fff;
+}
+#teamContainer1 .playerContainer {
+    border-right: 5px solid #00489B;
+}
+#teamContainer2 .playerContainer {
+    border-right: 5px solid #9B0000;
+}
+
+/* #region player image info */
+.playerImage {
+    grid-area: img;
+    background: url("../Assets/Images/Champions/Androxus.jpg");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-areas: 'playerName'
+                         'champName'
+                         'playerLevel';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+}
+.playerImage:hover {
+    cursor: pointer;
+}
+.playerImage:hover .playerName {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
+}
+.playerImage:hover .playerChampion {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
+}
+.playerImage:hover .playerLevel {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
+}
+.playerName {
+    grid-area: playerName;
+    padding-top: 5px;
+    padding-left: 5px;
+    font-family: Roboto;
+    line-height: 100%;
+    color: #fff;
+    font-size: 1.5em;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease-in-out;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+}
+.playerChampion {
+    grid-area: champName;
+    padding-left: 5px;
+    font-family: Yi-Baiti;
+    font-size: 1.5em;
+    line-height: 50%;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease-in-out;
+}
+.playerLevel {
+    grid-area: playerLevel;
+    font-family: Yi-Baiti;
+    font-size: 1.4em;
+    padding-right: 5px;
+    text-align: right;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease-in-out;
+}
+/* #endregion */
+
+/* #region player stats */
+.playerInfo {
+    grid-area: player;
+    display: grid;
+    grid-template-areas: 'pText'
+                         'pStats';
+    padding: 5px;
+    padding-right: 10px !important;
+    padding-left: 15px !important;
+}
+
+    .playerInfoStats {
+        grid-area: pStats;
+        display: grid;
+        grid-template-areas: 'rankedText stats pDivider rankedLeaveStat'
+                            'globalText stats pDivider globalLeaveStat';
+        grid-template-columns: 1fr 5fr 2px 3fr;
+        grid-template-rows: min-content min-content;
+        font-size: 12px;
+    }
+    .playerInfoText {
+        grid-area: pText;
+        font-family: Roboto;
+        font-size: 16px;
+    }
+
+        /* #region player ranked */
+        .playerInfoStatsRanked {
+            grid-area: rankedText;
+            font-family: Raleway;
+            text-align: right;
+            color: #bbb;
+            padding-left: 5px;
+        }
+        .winrate {
+            grid-area: stats;
+            padding-left: 5px;
+            text-align: left;
+            display: grid;
+            grid-template-areas: 'rpWin rpLose rpPer'
+                                 'gpWin gpLose gpPer';
+            grid-template-columns: min-content min-content 1fr;
+        }
+        .rankedWinStat {
+            grid-area: rpWin;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .rankedLoseStat {
+            grid-area: rpLose;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .rankedPerStat {
+            grid-area: rpPer;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .rankedLeaveStat {
+            grid-area: rankedLeaveStat;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+        }
+        /* #endregion */
+
+        /* #region player global */
+        .playerInfoStatsGlobal {
+            grid-area: globalText;
+            font-family: Raleway;
+            text-align: right;
+            color: #bbb;
+            padding-left: 5px;
+        }
+        .globalWinrate {
+            grid-area: globalStats;
+            padding-left: 5px;
+            text-align: left;
+            display: grid;
+            grid-template-areas: 'gpWin gpLose gpPer';
+            grid-template-columns: min-content min-content 1fr;
+        }
+        .globalWinStat {
+            grid-area: gpWin;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .globalLoseStat {
+            grid-area: gpLose;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .globalPerStat {
+            grid-area: gpPer;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+        }
+        .globalLeaveStat {
+            grid-area: globalLeaveStat;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+        }
+        /* #endregion */
+        
+    .playerInfoStatDivider {
+        grid-area: pDivider;
+        background: #535351;
+    }
+
+        /*#region ranked leave rate */
+        .rankedLeaveStat {
+            grid-area: rankedLeaveStat;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+        /*#endregion */
+        
+        /* #region global leave rate */
+        .globalLeaveStat {
+            grid-area: globalLeaveStat;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+        /* #endregion */
+
+/* #endregion */
+
+/* #region champion stats */
+.champInfo {
+    grid-area: champion;
+    display: grid;
+    grid-template-areas: 'cText'
+                         'cStats';
+    padding: 5px;
+    padding-right: 10px !important;
+    padding-left: 15px !important;
+}
+.champInfoText {
+    grid-area: cText;
+    font-size: 16px;
+    font-family: Roboto;
+}
+
+
+    .champInfoStats {
+        grid-area: cStats;
+        display: grid;
+        grid-template-areas: 'rankedChampText rankedKDA cDivider rankedChampWinrate'
+                            'casualChampText casualKDA cDivider globalChampWinrate';
+        grid-template-columns: 1fr 5fr 2px 3fr;
+        grid-template-rows: min-content min-content;
+        font-size: 12px;
+    }
+    .champInfoStatsRanked {
+        grid-area: rankedChampText;
+        font-family: Raleway;
+        text-align: right;    
+        color: #bbb;
+        padding-left: 5px;
+    }
+    .champRankedStats {
+        grid-area: rankedKDA;
+        padding-left: 10px;
+        text-align: left;
+    }
+
+    .champInfoStatsCasual {
+        grid-area: casualChampText;
+        font-family: Raleway;
+        text-align: right;
+        color: #bbb;
+        padding-left: 5px;
+    }
+    .champCasualStats {
+        grid-area: casualKDA;
+        padding-left: 10px;
+        text-align: left;
+    }
+
+    .champInfoStatDivider {
+        grid-area: cDivider;
+        background: #535351;
+    }
+
+    .champRankedWinStat {
+        grid-area: rankedChampWinrate;
+        text-align: left;
+        padding-left: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+    .champCasualWinStat {
+        grid-area: globalChampWinrate;
+        text-align: left;
+        padding-left: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+/* #endregion */
+
+/* #region player match history */
+#playerMatchHistory {
+    margin: 2.5%;
+    background: #27272B;
+}
+.show {
+    grid-area: matchDetails;
+}
+/* #endregion */
+
+
+
+
+
+
+
+.ri {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat !important;
+    background-size: 50% !important;
+    background-position: center !important;
+}
+.r0 {
+    background: url('../Assets/Images/Ranks/r0.png');
+}
+.r1 {
+    background: url('../Assets/Images/Ranks/r1.png');
+}
+.r2 {
+    background: url('../Assets/Images/Ranks/r2.png');
+}
+.r3 {
+    background: url('../Assets/Images/Ranks/r3.png');
+}
+.r4 {
+    background: url('../Assets/Images/Ranks/r4.png');
+}
+.r5 {
+    background: url('../Assets/Images/Ranks/r5.png');
+}
+.r6 {
+    background: url('../Assets/Images/Ranks/r6.png');
+}
+.r7 {
+    background: url('../Assets/Images/Ranks/r7.png');
+}
+.r8 {
+    background: url('../Assets/Images/Ranks/r8.png');
+}
+.r9 {
+    background: url('../Assets/Images/Ranks/r9.png');
+}
+.r10 {
+    background: url('../Assets/Images/Ranks/r10.png');
+}
+.r11 {
+    background: url('../Assets/Images/Ranks/r11.png');
+}
+.r12 {
+    background: url('../Assets/Images/Ranks/r12.png');
+}
+.r13 {
+    background: url('../Assets/Images/Ranks/r13.png');
+}
+.r14 {
+    background: url('../Assets/Images/Ranks/r14.png');
+}
+.r15 {
+    background: url('../Assets/Images/Ranks/r15.png');
+}
+.r16 {
+    background: url('../Assets/Images/Ranks/r16.png');
+}
+.r17 {
+    background: url('../Assets/Images/Ranks/r17.png');
+}
+.r18 {
+    background: url('../Assets/Images/Ranks/r18.png');
+}
+.r19 {
+    background: url('../Assets/Images/Ranks/r19.png');
+}
+.r20 {
+    background: url('../Assets/Images/Ranks/r20.png');
+}
+.r21 {
+    background: url('../Assets/Images/Ranks/r21.png');
+}
+.r22 {
+    background: url('../Assets/Images/Ranks/r22.png');
+}
+.r23 {
+    background: url('../Assets/Images/Ranks/r23.png');
+}
+.r24 {
+    background: url('../Assets/Images/Ranks/r24.png');
+}
+.r25 {
+    background: url('../Assets/Images/Ranks/r25.png');
+}
+.r26 {
+    background: url('../Assets/Images/Ranks/r26.png');
+}
+.r27 {
+    background: url('../Assets/Images/Ranks/r27.png');
+}

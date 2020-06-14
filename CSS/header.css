@@ -1,39 +1,7 @@
-@font-face {
-    font-family: "Cornerstone";
-    src: url("../Assets/Fonts/cornerstone/Cornerstone.ttf");
-    src: url("../Assets/Fonts/cornerstone/cornerstone-webfont.woff") format("woff");
-}
-@font-face {
-    font-family: "Raleway";
-    src: url("../Assets/Fonts/Raleway/Raleway-Regular.ttf");
-}
-
-/*
- * Primary color: #1a1a1d
- * Secundary color: #41413F
- * Accent 1 color: #DF775C
- * Accent 2 color: #846A59
- * Text color: #F3E7C7
-*/
-
-.hidden {
-    display: none !important;
-}
-
-.noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome and Opera */
-}
-
 #header {
+    grid-area:                  nav;
     min-height:                 20px;
-    height:                     3vh;
-    width:                      100vw;
+    height:                     100%;
     padding-left:               10px;
     background:                 #111;
     display: grid;
@@ -62,14 +30,6 @@
 #header span {
     width:                      3vh;
     height:                     3vh;
-    color:                      #fff;
-    font-size:                  1.1em;
-    text-align:                 center;
-    line-height:                3vh;
-}
-#header svg {
-    width:                      2vh !important;
-    height:                     2vh !important;
     color:                      #fff;
     font-size:                  1.1em;
     text-align:                 center;

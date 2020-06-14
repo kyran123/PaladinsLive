@@ -1,0 +1,23 @@
+#matchContainer {
+    grid-area:                  matchDetails;
+    width:                      100%;
+    height:                     100%;
+    padding:                    50px;
+    display:                    grid;
+    grid-template-columns:      1fr 25% 1fr;
+}
+#matchContainer::-webkit-scrollbar {
+    width: 15px;
+    background: #111;
+}
+#matchContainer::-webkit-scrollbar-thumb {
+    background: #000;
+}
+@media only screen and (max-width: 950px) {
+    #matchContainer {
+        overflow-y: scroll;
+        padding: 15px;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 5% 1fr;
+    }
+}

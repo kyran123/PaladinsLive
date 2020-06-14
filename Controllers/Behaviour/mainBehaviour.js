@@ -7,3 +7,7 @@ $("#Maximize").click(() => {
 $("#close").click(() => {
     window.API.send("quit", {});
 });
+
+window.onload = () => {
+    
+}
