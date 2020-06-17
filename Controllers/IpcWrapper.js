@@ -31,6 +31,14 @@ class wrapper {
             this.showMainScreen();
         });
 
+        //Get live match details
+        ipcMain.on("showLiveMatch", (event, data) => {
+            this.paladins.getLiveMatchData(data.id, (data) => {
+                console.log(data);
+                event.sender.send("showLiveMatchData", data);
+            });
+        }); 
+
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
     showSetup() { BrowserWindow.getFocusedWindow().webContents.send("showSetup"); }

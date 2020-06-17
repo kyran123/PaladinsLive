@@ -66,9 +66,12 @@
             </div>
         </div>
 
+        
         <div id="matchContainer">
+            <div id="matchDetails">
+                Frog Isle (Casual, Europe)
+            </div>
             <div id="teamContainer1" class="teamContainer">
-
                 <div class="playerContainer">
                     <div class="playerImage">
                         <div class="playerName noselect">Kyran123</div>
@@ -130,7 +133,32 @@
                 <div class="playerContainer"></div>
                 <div class="playerContainer"></div>
             </div>
-            <div></div>
+
+            <div id="matchInfo">
+                <div id="matchRankInfoTitle">
+                    <div id="averageRankTitle">Team averages:</div>
+                    <div id="team1Average" class="r24 ri">
+                        Team 1 <br/>
+                        <span>
+                            142 <br/>
+                            49.32%
+                        </span>
+                    </div>
+                    <div id="team2Average" class="r22 ri">
+                        Team 2 <br/>
+                        <span>
+                            142 <br/>
+                            49.32%
+                        </span>
+                    </div>
+                </div>
+                <div id="expectedWinChance">
+                    <span>Estimated win chance:</span>
+                    <div id="team1WinChance">43%</div>
+                    <div id="team2WinChance">57%</div>
+                </div>
+            </div>
+
             <div id="teamContainer2" class="teamContainer">
                 <div class="playerContainer">
                     <div class="playerImage">
@@ -191,10 +219,11 @@
             </div>
         </div>
 
-        <div id="playerMatchHistory" class="show">
+        <div id="playerMatchHistory">
             
         </div>
 
     </body>
+    <script src="../Libraries/EQCSS.min.js" defer></script>
     <script src="../Controllers/Behaviour/mainBehaviour.js" defer></script>
 </html>

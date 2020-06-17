@@ -2,17 +2,6 @@
  *   PLAYER CLASS
 */
 module.exports = class Player {
-    queueData = {
-        424: 'Casual Siege',
-        425: 'Practice Siege',
-        428: 'Ranked',
-        445: 'Test Maps',
-        452: 'Casual Onslaught',
-        453: 'Practice Onslaught',
-        469: 'Casual TDM',
-        470: 'Practice TDM'
-    }
-
     rankData = {
         1: 'Bronze 5',
         2: 'Bronze 4',
@@ -67,7 +56,7 @@ module.exports = class Player {
         this.globalWins = 0;
         this.globalLosses = 0;
         this.globalWinPer = 0;
-        this.globalleaves = 0;
+        this.globalLeaves = 0;
         this.globalLeavePer = 0;
 
         this.championCasualsAssists = 0;
@@ -155,31 +144,22 @@ module.exports = class Player {
         this.championRankedGold = playerChampionGold;
     }
 
-    getPlayerHtmlCard() {
-        var rankedLeavePer = (this.rankedLeavePer == undefined) ? 0 : this.rankedLeavePer;
-        var rankedWinPer = (this.rankedWinPer == undefined) ? 0 : this.rankedWinPer;
-        var globalWinPer = (this.globalWinPer == undefined) ? 0 : this.globalWinPer;
-        var globalLeavePer = (this.globalLeavePer == undefined) ? 0 : this.globalLeavePer;
+    validate() {
+        this.rankedLeavePer = (this.rankedLeavePer == undefined) ? 0 : this.rankedLeavePer;
+        this.rankedWinPer = (this.rankedWinPer == undefined) ? 0 : this.rankedWinPer;
+        this.globalWinPer = (this.globalWinPer == undefined) ? 0 : this.globalWinPer;
+        this.globalLeavePer = (this.globalLeavePer == undefined) ? 0 : this.globalLeavePer;
 
-        var championCasualAverageAssists = (this.championCasualAverageAssists == undefined) ? 0 : this.championCasualAverageAssists;
-        var championCasualAverageKills = (this.championCasualAverageKills == undefined) ? 0 : this.championCasualAverageKills;
-        var championCasualAverageDeaths = (this.championCasualAverageDeaths == undefined) ? 0 : this.championCasualAverageDeaths;
-        var championCasualsWinPer = (this.championCasualsWinPer == undefined) ? 0 : this.championCasualsWinPer;
+        this.championCasualAverageAssists = (this.championCasualAverageAssists == undefined) ? 0 : this.championCasualAverageAssists;
+        this.championCasualAverageKills = (this.championCasualAverageKills == undefined) ? 0 : this.championCasualAverageKills;
+        this.championCasualAverageDeaths = (this.championCasualAverageDeaths == undefined) ? 0 : this.championCasualAverageDeaths;
+        this.championCasualsWinPer = (this.championCasualsWinPer == undefined) ? 0 : this.championCasualsWinPer;
 
-        var championRankedAverageAssists = (this.championRankedAverageAssists ==undefined) ? 0 : this.championRankedAverageAssists;
-        var championRankedAverageDeaths = (this.championRankedAverageDeaths == undefined) ? 0 : this.championRankedAverageDeaths;
-        var championRankedAverageKills = (this.championRankedAverageKills == undefined) ? 0 : this.championRankedAverageKills;
-        var championRankedWinPer = (this.championRankedWinPer == undefined) ? 0 : this.championRankedWinPer;
-        var championRankedWins = (this.championRankedWins == undefined) ? 0 : this.championRankedWins;
-        var championRankedLosses = (this.championRankedLosses == undefined) ? 0 : this.championRankedLosses;
-
-
-        //TODO: change this to return an object, and generate the html on the renderer side
-        this.playerHtmlCard = "<div id='pHeader'><div id='pUsername' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.name+"</div><div id='hFiller' ></div><div id='pAccountLevel' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.level+"</div></div>" +
-               "<div id='pSubHeader'><div id='rTitle'>Ranked: </div><div id='rWin' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.rankedWins+"</div><div id='rLoss' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.rankedLosses+"</div><div id='rPer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+rankedWinPer+"%</div><div id='pDiv'></div><div id='rLeaves' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.rankedLeaves+"</div><div id='rLeavePer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+rankedLeavePer+"%</div><div id='rFiller'></div><div id='rank' class='r"+this.rank+" ri' onmouseover='onHover(this)' onmouseleave='resetTooltip()'><div id='tp'>"+this.tp+"</div></div>" + 
-               "<div id='gTitle'>Global: </div><div id='gWin' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.globalWins+"</div><div id='gLoss' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.globalLosses+"</div><div id='gPer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+globalWinPer+"%</div><div id='gLeaves' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.globalLeaves+"</div><div id='gLeavePer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+globalLeavePer+"%</div><div id='gFiller'></div></div>" + 
-               "<div id='champImage' class='c"+this.championId+" ci'></div><div id='cInfo'><div id='cName'><b>"+this.championName+"<b></div></div>" +
-               "<div id='cStats'><div id='casAvg' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championCasualAverageKills+" / "+championCasualAverageDeaths+" / "+championCasualAverageAssists+"</div><div id='casWin' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.championCasualsWins+"</div><div id='casLoss' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+this.championCasualsLosses+"</div><div id='casWinPer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championCasualsWinPer+"%</div>" +
-               "<div id='rankAvg' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championRankedAverageKills+" / "+championRankedAverageDeaths+" / "+championRankedAverageAssists+"</div><div id='rankWin' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championRankedWins+"</div><div id='rankLoss' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championRankedLosses+"</div><div id='rankWinPer' onmouseover='onHover(this)' onmouseleave='resetTooltip()'>"+championRankedWinPer+"%</div></div>";
+        this.championRankedAverageAssists = (this.championRankedAverageAssists ==undefined) ? 0 : this.championRankedAverageAssists;
+        this.championRankedAverageDeaths = (this.championRankedAverageDeaths == undefined) ? 0 : this.championRankedAverageDeaths;
+        this.championRankedAverageKills = (this.championRankedAverageKills == undefined) ? 0 : this.championRankedAverageKills;
+        this.championRankedWinPer = (this.championRankedWinPer == undefined) ? 0 : this.championRankedWinPer;
+        this.championRankedWins = (this.championRankedWins == undefined) ? 0 : this.championRankedWins;
+        this.championRankedLosses = (this.championRankedLosses == undefined) ? 0 : this.championRankedLosses;
     }
 }

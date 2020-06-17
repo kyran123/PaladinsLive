@@ -1,21 +1,17 @@
-const settings = require('electron-settings').default;
+const settings = require('electron-store');
 
 class userSettings {
-    //Initialize for use
+    //Initialize
     initialize() {
-        //Configure basic file settings
-        settings.configure = {
-            fileName: 'dev',
-            numSpaces: 4
-        };
+        this.settings = new settings();
     }
     //Authenticate this application
     authenticate(value) {
-        settings.set('auth', value);
+        this.settings.set('auth', value);
     }
     //See if application is already authenticated
     isAuthenticated() {
-        if(settings.has('auth.devId')) {
+        if(this.settings.has('auth.devId')) {
             return true;
         }
         return false;
@@ -23,7 +19,7 @@ class userSettings {
     //Check if setting exists
     //[PARAM 1] A string of setting name
     hasSetting(setting, callback) {
-        if(settings.has(setting)) {
+        if(this.settings.has(setting)) {
             callback(true);
         }
         callback(false)
@@ -31,17 +27,19 @@ class userSettings {
     //Get a specified setting
     //[PARAM 1] A string of the setting name
     //[PARAM 2] Callback function
-    getSetting(setting, callback) {
-        if(settings.has(setting)) {
+    async getSetting(setting, callback) {
+        if(this.settings.has(setting)) {
             callback({
                 result: true,
-                setting: settings.get(setting)
-            })
+                setting: this.settings.get(setting)
+            });
+        } else {
+            callback({
+                result: false,
+                msg: 'Setting: ' + setting + ' not found.'
+            });
         }
-        callback({
-            result: false,
-            msg: 'Setting: ' + setting + ' not found.'
-        });
+        
     }
     //Set a NEW specified setting
     //[PARAM 1] A string of the setting name

@@ -5,6 +5,7 @@ const md5 = require('md5');
 let Match = require('../Models/Match.js');
 let Player = require('../Models/Player.js');
 const { nextTick } = require('process');
+const { resolve } = require('path');
 
 class PaladinsAPI {
     constructor() {
@@ -23,38 +24,42 @@ class PaladinsAPI {
     //Every 15 minutes this session needs to be renewed
 
     //Checks if the session is valid
-    isSessionValid() {
-        return new promises(async (resolve, reject) => {
-            //Check if session is stored here already
-            if(this.session != null) {
-                //Check if this session is valid
-                const sessionResult = await axios.get(`${this.apiLink}/${this.methods.test}/${this.user.devId}/${this.getSignature('testsession')}/${this.session}/${this.timeStamp()}`)
-                                                 .catch((err) => { console.log("[PaladinsAPI.js]:isSessionValid() error: " + err); });
-                if(sessionResult.data.startsWith("Invalid")) {
-                    //Key is invalid
-                    resolve({ result: false });
-                } else {
-                    //Key is valid
-                    resolve({ result: true });
-                }
-            } else {
-                //If there is no session stored in the first place
-                resolve({ result: false });
-            }
+    async isSessionValid() {
+        //Create new promise and return it
+        return new Promise((resolve, reject) => {
+            //Check if session variable is already empty, and then return false
+            if(this.session == null) return resolve(false);
+            //If session variable is not empty, use the testsessionJson method to verify if it's still valid
+            axios.get(`${this.apiLink}/${this.methods.test}/${this.user.devId}/${this.getSignature('testsession')}/${this.session}/${this.timeStamp()}`)
+            .then((result) => {
+                //If it's invalid, resolve with false parameter
+                if(result.data.startsWith("Invalid")) return resolve(false);
+                //If we get here, it's valid and we can resolve with true parameter
+                return resolve(true);
+            })
+            .catch((err) => {
+                console.log("[PaladinsAPI.js]:isSessionValid() error: " + err);
+            });
         });
     }
     //Gets the latest session IF NEEDED
-    async getSessionIfNeeded() {
-        //Check if there is an session stored and is correct
-        const response = await this.isSessionValid().catch((err) => { console.log("[PaladinsAPI.js]:getSessionIfNeeded() error: " + err); });
-        if(!response.result) {
-            //Session is not valid
-            //Create new session
-            const sessionResult = await axios.get(`${this.apiLink}/${this.methods.create}/${this.user.devId}/${this.getSignature('testsession')}/${this.session}/${this.timeStamp()}`)
-                                                .catch((err) => { console.log("[PaladinsAPI.js]:getSessionIfNeeded() error: " + err); });
-            this.session = sessionResult.data.session_id;
-        }
-        //We have a valid session at this point (unless the create session failed, but that SHOULD be caught)
+    getSessionIfNeeded() {      
+        return new Promise(async (resolve, reject) => {
+            try {
+                //Check if there is an session stored and is correct
+                const result = await this.isSessionValid();
+                //Check if session if valid and then resolve
+                if(result) resolve(true);
+                //No valid session so create a new session
+                const sessionResult = await axios.get(`${this.apiLink}/${this.methods.create}/${this.user.devId}/${this.getSignature('createsession')}/${this.timeStamp()}`)
+                this.session = sessionResult.data.session_id;
+                resolve(true);
+            }
+            catch (err) {
+                console.log("[PaladinsAPI.js]:getSessionIfNeeded() " + err);
+                reject();
+            }            
+        });
     }
     //Get signature needed for the requests
     getSignature(method) {
@@ -73,128 +78,145 @@ class PaladinsAPI {
 
     //Get actual paladins data
     async getLiveMatchData(playerId, callback) {
-
-        //Get the player status
-        const status = axios.get(`${this.apiLink}/${this.methods.playerStatus}/${this.user.devId}/${this.getSignature('getplayerstatus')}/${this.session}/${this.timeStamp()}/${playerId}`)
-                            .catch((err) => { console.log("[PaladinsAPI.js]:getLiveMatchData() player status - error: " + err); });
-        const matchId = status.data[0].Match;
-        if(matchId === 0) callback({ result: false, msg: "No match found" });
-        //Create new match object
-        this.match = new Match(
-            playerInfo.Queue, 
-            playerInfo.mapGame
-        );
-        //Now that we have the match id
-
-        //Get the live match stats
-        const matchStats = axios.get(`${this.apiLink}/${this.methods.liveMatch}/${this.user.devId}/${this.getSignature('getmatchplayerdetails')}/${this.session}/${this.timeStamp()}/${matchId}`)
-                                .catch((err) => { console.log("[PaladinsAPI.js]:getLiveMatchData() live match stats - error: " + err); });
-        //Check if match stats returned any users
-        if(Object.keys(matchStats.data).length === 0) { console.log("[PaladinsAPI.js]:getLiveMatchData() match stats array check - error: " + err); };
-        matchStats.data.forEach((player, index) => {
-            this.getPlayerData(player, index);
-        });
+        try {
+            await this.getSessionIfNeeded();
+            const matchData = await axios.get(`${this.apiLink}/${this.methods.playerStatus}/${this.user.devId}/${this.getSignature('getplayerstatus')}/${this.session}/${this.timeStamp()}/${playerId}`);
+            //Check player status
+            //0 - offline
+            //1 - In lobby
+            //2 - Champion selection
+            //3 - In game
+            //4 - Online (player may be blocking data if this shows up)
+            //5 - Unknown
+            const userStatus = matchData.data[0].status;
+            const matchId = matchData.data[0].Match;
+            if(userStatus === 0) callback({ result: false, msg: "User is offline" });
+            if(userStatus === 1) callback({ result: false, msg: "User is in lobby" });
+            if(userStatus === 2) callback({ result: false, msg: "User is in champion select screen" });
+            if(userStatus === 4 || userStatus === 5) callback({ result: false, msg: "User has data hidden" });
+            if(userStatus === 3) {
+                const matchStats = await axios.get(`${this.apiLink}/${this.methods.liveMatch}/${this.user.devId}/${this.getSignature('getmatchplayerdetails')}/${this.session}/${this.timeStamp()}/${matchId}`);                
+                this.match = new Match(
+                    matchStats.data[0].Queue,
+                    matchStats.data[0].mapGame,
+                    matchStats.data[0].playerRegion
+                );
+                for(var i = 0; i < matchStats.data.length; i++) {
+                    await this.getPlayerData(matchStats.data[i], i);
+                }
+                this.match.getAverages();
+                this.match.calculateWinchance();
+                callback({ match: this.match, result: true });
+            }
+        }
+        catch (err) {
+            console.dir(err, {depth: null});
+            console.log("[PaladinsAPI.js]:getLiveMatchData() " + err); 
+        }
     }
     
     //Get actual player information
     async getPlayerData(playerInfo, index) {
-        //Create new player object
-        //Add player object to the match player list
-        const playerObj = this.match.addPlayer(new Player(
-            index,
-            playerInfo.playerId,
-            playerInfo.playerName, 
-            playerInfo.Account_Level, 
-            playerInfo.taskForce,
-            playerInfo.ChampionId, 
-            playerInfo.ChampionName
-        ));
-
-        //Get the player rank
-        const player = axios.get(`${this.apiLink}/${this.methods.player}/${this.user.devId}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
-                                .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get player - error: " + err); });
-        //Get the player data in a JS object
-        const PlayerJSobject = JSON.parse(player.data[0]);
-        //Check if user is KBM, if not get other data
-        console.dir(PlayerJSobject, { depth: null }); // TEMPORARY
-        if(PlayerJSobject.Tier_RankedKBM !== undefined) {
-            //KBM
-            playerObj.setPlayerRank(
-                response.data[0].Tier_RankedKBM, 
-                response.data[0].RankedKBM.Points, 
-                response.data[0].RankedKBM.Wins, 
-                response.data[0].RankedKBM.Losses, 
-                response.data[0].RankedKBM.Leaves, 
-                response.data[0].Wins, 
-                response.data[0].Losses, 
-                response.data[0].Leaves
-            );
-        } else {
-            //Not KBM
-            //TODO: figure out how to get ranked stats for non-kbm ranked players
-            playerObj.setPlayerRank(
-                '?', 
-                '?', 
-                '?', 
-                '?', 
-                '?', 
-                response.data[0].Wins, 
-                response.data[0].Losses, 
-                response.data[0].Leaves
-            );            
-        }
-        //Check if player doesn't have data hidden
-        //Doing this after the fact, because the other if statement would have overwritten this data I set here
-        if(PlayerJSobject === undefined) {
-            playerObj.setPlayerRank(
-                '?', 
-                '?', 
-                '?', 
-                '?', 
-                '?', 
-                "?", 
-                "?", 
-                "?"
-            );
-        }
-
-        //Get casual queue stat for player
-        const casual  = axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/424`)
-                             .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get casual queue stats - error: " + err); });
-        const casualChampions = JSON.parse(casual.data);
-        casualChampions.forEach((champion) => {
-            //check if data is for the champion the user has chosen
-            if(champion.ChampionId === playerObj.id) {
-                //Only called once we found the right champion
-                playerObj.setPlayerCasualChampion(
-                    champion.Assists,
-                    champion.Kills,
-                    champion.Deaths,
-                    champion.Losses,
-                    champion.Wins,
-                    champion.Matches,
-                    champion.Gold
+        try {
+            //Create new player object
+            //Add player object to the match player list
+            const playerObj = this.match.addPlayer(new Player(
+                index,
+                playerInfo.playerId,
+                playerInfo.playerName, 
+                playerInfo.Account_Level, 
+                playerInfo.taskForce,
+                playerInfo.ChampionId, 
+                playerInfo.ChampionName
+            ));
+            //Get the player rank
+            const player = await axios.get(`${this.apiLink}/${this.methods.player}/${this.user.devId}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
+                                    .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get player - error: " + err); });
+            //Get the player data in a JS object
+            const PlayerJSobject = player.data[0];
+            //Check if user is KBM
+            if(PlayerJSobject.Tier_RankedKBM > 0) {
+                playerObj.setPlayerRank(
+                    PlayerJSobject.Tier_RankedKBM, 
+                    PlayerJSobject.RankedKBM.Points, 
+                    PlayerJSobject.RankedKBM.Wins, 
+                    PlayerJSobject.RankedKBM.Losses, 
+                    PlayerJSobject.RankedKBM.Leaves, 
+                    PlayerJSobject.Wins, 
+                    PlayerJSobject.Losses, 
+                    PlayerJSobject.Leaves
                 );
             }
-        });
-        
+            //Check if user is Controller
+            if(PlayerJSobject.Tier_RankedController > 0) {
+                playerObj.setPlayerRank(
+                    PlayerJSobject.Tier_RankedController,
+                    PlayerJSobject.RankedController.Points,
+                    PlayerJSobject.RankedController.Wins,
+                    PlayerJSobject.RankedController.Losses,
+                    PlayerJSobject.RankedController.Leaves,
+                    PlayerJSobject.Wins,
+                    PlayerJSobject.Losses,
+                    PlayerJSobject.Leaves
+                )
+            }
+            //Check if player does have data hidden
+            if(PlayerJSobject === undefined) {
+                playerObj.setPlayerRank(
+                    '?', 
+                    '?', 
+                    '?', 
+                    '?', 
+                    '?', 
+                    "?", 
+                    "?", 
+                    "?"
+                );
+            }
 
-        //Get ranked queue stat for player
-        const ranked = axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/424`)
-                            .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get ranked queue stats - error: " + err); });
-        const rankedChampions = JSON.parse(ranked.data);
-        //check if data is for the champion the user has chosen
-        if(champion.ChampionId === playerObj.id) {
-            //Only called once we found the right champion
-            playerObj.setPlayerRankedChampion(
-                champion.Assists,
-                champion.Kills,
-                champion.Deaths,
-                champion.Losses,
-                champion.Wins,
-                champion.Matches,
-                champion.Gold
-            );
+            //Get casual queue stat for player
+            const casual = await axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.user.devId}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/424`);
+            const casualChampions = casual.data;
+            casualChampions.forEach((champion) => {
+                //check if data is for the champion the user has chosen
+                if(champion.ChampionId == playerObj.championId) {
+                    //Only called once we found the right champion
+                    playerObj.setPlayerCasualChampion(
+                        champion.Assists,
+                        champion.Kills,
+                        champion.Deaths,
+                        champion.Losses,
+                        champion.Wins,
+                        champion.Matches,
+                        champion.Gold
+                    );
+                }
+            });
+            
+
+            //Get ranked queue stat for player
+            const ranked = await axios.get(`${this.apiLink}/${this.methods.queueStats}/${this.user.devId}/${this.getSignature('getqueuestats')}/${this.session}/${this.timeStamp()}/${playerObj.id}/428`);
+            const rankedChampions = ranked.data;
+            rankedChampions.forEach((champion) => {
+                 //check if data is for the champion the user has chosen
+                if(champion.ChampionId == playerObj.championId) {
+                    //Only called once we found the right champion
+                    playerObj.setPlayerRankedChampion(
+                        champion.Assists,
+                        champion.Kills,
+                        champion.Deaths,
+                        champion.Losses,
+                        champion.Wins,
+                        champion.Matches,
+                        champion.Gold
+                    );
+                }
+            });
+           
+            playerObj.validate();
+        }
+        catch(err) {
+            console.log("[PaladinsAPI.js]:getPlayerData() " + err);
         }
     }
 }

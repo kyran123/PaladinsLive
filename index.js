@@ -64,7 +64,10 @@ function loadProgram() {
 				ipcWrapper.showSetup();
 			} else {
 				//continue starting program
-				showMainScreen();
+				userSettings.getSetting("auth", (res) => {
+					if(res.result) paladinsAPI.user = res.setting;
+					showMainScreen();
+				});
 			}
 		}, 2000);
 		
@@ -145,7 +148,7 @@ function showMainScreen() {
 	//When the DOM has loaded
 	mainWindow.webContents.once('dom-ready', () => {
 		mainWindow.show();
-		loadingWindow.close();
+		if(loadingWindow) loadingWindow.close();
 	});
 }
 

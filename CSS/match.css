@@ -3,8 +3,81 @@
     width:                      100%;
     height:                     100%;
     padding:                    50px;
+    padding-top:                25px !important;
     display:                    grid;
+    grid-template-areas:        'details details details'
+                                'team1 info team2';
     grid-template-columns:      1fr 25% 1fr;
+    grid-template-rows:         25px 1fr;
+}
+#teamContainer1 {
+    grid-area: team1;
+}
+#teamContainer2 {
+    grid-area: team2;
+}
+#matchDetails {
+    grid-area: details;
+    font-family: Work-sans;
+    color: #aaa;
+    text-align: center;
+}
+#matchInfo {
+    grid-area: info;
+    padding: 5px;
+    color: #fff;
+}
+#matchRankInfoTitle {
+    display: grid;
+    grid-template-areas: 'arTitle arTitle'
+                         'r1 r2';
+    grid-template-rows: min-content min-content;
+    grid-gap: 10%;
+    margin-left: 15px;
+    margin-right: 15px;
+    font-family: Work-sans;
+}
+#team1Average {
+    grid-area: r1;
+    background-size: contain !important;
+    background-position: right !important;
+    font-weight: 500;
+}
+#team1Average span, #team2Average span {
+    font-weight: 100 !important;
+    font-size: 12px;
+    text-align: right !important;
+    color: #999;
+}
+#team2Average {
+    grid-area: r2;
+    background-size: contain !important;
+    background-position: right !important;
+    font-weight: 500;
+}
+#averageRankTitle {
+    grid-area: arTitle;
+    text-align: center !important;
+}
+#expectedWinChance {
+    margin-top: 3vh;
+    display: grid;
+    grid-template-areas: 'ewcTitle ewcTitle'
+                         'e1 e2';
+    grid-template-columns: 1fr 1fr;
+}
+#expectedWinChance span {
+    grid-area: ewcTitle;
+    text-align: center;
+    margin-bottom: 1vh;
+}
+#team1WinChance {
+    grid-area: e1;
+    text-align: center;
+}
+#team2WinChance {
+    grid-area: e2;
+    text-align: center;
 }
 #matchContainer::-webkit-scrollbar {
     width: 15px;
@@ -13,11 +86,17 @@
 #matchContainer::-webkit-scrollbar-thumb {
     background: #000;
 }
-@media only screen and (max-width: 950px) {
+@element #matchContainer and (max-width: )
+@media only screen and (max-width: 51vw) {
     #matchContainer {
         overflow-y: scroll;
         padding: 15px;
+        grid-template-areas: 'team1'
+                             'details' 
+                             'info' 
+                             'team2';
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 5% 1fr;
+        grid-template-rows: 1fr min-content 1fr;
+        grid-gap: 3vh;
     }
 }

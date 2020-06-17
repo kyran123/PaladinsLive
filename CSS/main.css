@@ -64,17 +64,9 @@ body {
     display: grid;
     grid-template-areas: 'nav nav'
                          'playerSearch matchDetails';
-    grid-template-columns: 20vw 80vw;
+    grid-template-columns: minmax(300px, 20vw) 80vw;
     grid-template-rows: 3vh 97vh;
 }
-@media only screen and (max-width: 950px) {
-    body {
-        grid-template-columns: 35vw 65vw;
-    }
-}
-
-
-
 #playerSearchContainer {
     grid-area: playerSearch;
     width: 100%;
