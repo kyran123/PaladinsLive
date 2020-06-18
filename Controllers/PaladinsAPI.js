@@ -16,7 +16,9 @@ class PaladinsAPI {
             player: 'getplayerJson',
             playerStatus: 'getplayerstatusJson',
             liveMatch: 'getmatchplayerdetailsJson',
-            queueStats: 'getqueuestatsJson'
+            queueStats: 'getqueuestatsJson',
+            matchHistory: 'getmatchhistoryJson',
+            matchDetails: 'getmatchdetailsbatchJson'
         }
     }
     //Session
@@ -217,6 +219,38 @@ class PaladinsAPI {
         }
         catch(err) {
             console.log("[PaladinsAPI.js]:getPlayerData() " + err);
+        }
+    }
+
+    //Get match history
+    async getMatchHistory(playerId, callback) {
+        try {
+            await this.getSessionIfNeeded();
+            const playerHistory = await axios.get(`${this.apiLink}/${this.methods.matchHistory}/${this.user.devId}/${this.getSignature('getmatchhistory')}/${this.session}/${this.timeStamp()}/${playerId}`);
+            let matchIds = '';
+            for(var i = 0; i < 5; i++) {
+                matchIds += playerHistory.data[i].Match;
+                if(i < 4) {
+                    matchIds += ",";
+                }
+            }
+            const matchHistory = await axios.get(`${this.apiLink}/${this.methods.matchDetails}/${this.user.devId}/${this.getSignature('getmatchdetailsbatch')}/${this.session}/${this.timeStamp()}/${matchIds}`);
+            let matches = [];
+            let match = [];
+            let lastId = matchHistory.data[0].Match;
+            matchHistory.data.forEach((player) => {
+                if(lastId !== player.Match) {
+                    lastId = player.Match;
+                    matches.push(match);
+                    match = [];
+                }
+                match.push(player);
+            });
+            matches.push(match);
+            callback({ result: true, history: matches });
+        }
+        catch(err) {
+            console.log("[PaladinsAPI.js]:getMatchHistory() " + err); 
         }
     }
 }

@@ -18,19 +18,8 @@ const validChannels = [
     "showLiveMatch",
     "authenticate",
     "showLiveMatchData",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test",
-    "test"
+    "showMatchHistory",
+    "showMatchHistoryData"
 ];
 window.onload = () => {
     // Expose protected methods that allow the renderer process to use

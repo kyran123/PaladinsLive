@@ -86,7 +86,7 @@
 #matchContainer::-webkit-scrollbar-thumb {
     background: #000;
 }
-@element #matchContainer and (max-width: )
+/*@element #matchContainer and (max-width: )*/
 @media only screen and (max-width: 51vw) {
     #matchContainer {
         overflow-y: scroll;
@@ -99,4 +99,90 @@
         grid-template-rows: 1fr min-content 1fr;
         grid-gap: 3vh;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#playerMatchHistory {
+    display: grid;
+    grid-template-rows: repeat(5, min-content);
+    grid-row-gap: 2%;
+    overflow-y: scroll;
+    padding: 15px;
+}
+#playerMatchHistory::-webkit-scrollbar {
+    background: #111;
+}
+#playerMatchHistory::-webkit-scrollbar-thumb {
+    background: #000;
+}
+.match {
+    display: grid;
+    grid-template-areas: 'info info'
+                         'team1 team2';
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10%;
+    background: #3c3c43;
+}
+.matchInfoContainer {
+    grid-area: info;
+    text-align: center;
+    padding-top: 1em;
+}
+.matchInfo {
+    font-family: Roboto;
+    color: #fff;
+    font-size: 1.5em;
+}
+.matchTime {
+    font-family: Yi-Baiti;
+    color: #bbb;
+    font-size: 1.1em;
+}
+.matchTeam1 { grid-area: team1; }
+.matchTeam2 { grid-area: team2; }
+.matchTeam1, .matchTeam2 {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-row-gap: 2%;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: 4em;
+}
+.matchPlayerHeader {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-column-gap: 0.5em;
+}
+.matchPlayerName {
+    font-family: Roboto;
+    color: #fff;
+    font-size: 2em;
+}
+.matchPlayerChampion {
+    font-family: Yi-Baiti;
+    color: #ccc;
+    font-size: 1.5em;
+    line-height: 2em;
+}
+.matchPlayerStats {
+    font-family: Work-sans;
+    color: #ccc;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+.matchPlayerStats span {
+    font-size: 1em;
 }

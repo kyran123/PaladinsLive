@@ -15,20 +15,35 @@ window.onload = () => {
             id: userId
         });
     });
+    $(".showHistory").click((event) => {
+        const userId = $(event.target).parent().attr("id");
+        window.API.send("showMatchHistory", {
+            id: userId
+        });
+    });
     window.API.receive("showLiveMatchData", (data) => {
+        new dataHandler("live", data);
+    });
+    window.API.receive("showMatchHistoryData", (data) => {
         console.log(data);
-        new dataHandler(data);
+        new dataHandler("history", data);
     });
 }
 
 class dataHandler {
-    constructor(data) {
-        if(!data.result) {
-            //User not in game
+    constructor(res, data) {
+        switch(res) {
+            case "live":
+                this.refresh();
+                this.showMatchInfo(data.match);
+                break;
+            case "history":
+                this.refresh();
+                this.showMatchHistory(data.history);
+                break;
+            default: 
             console.log(data.msg);
-        } else {
-            this.refresh();
-            this.showMatchInfo(data.match);
+
         }
     }
     //refresh() basically resets information that has already been set
@@ -44,6 +59,7 @@ class dataHandler {
         $("#team2Average span").empty();
         $("#teamContainer1").empty();
         $("#teamContainer2").empty();
+        $("#playerMatchHistory").empty();
     }
     //Returns the queue name of the game
     //Since the API only returns a nr representing the queue
@@ -137,93 +153,71 @@ class dataHandler {
             </div>`
         );
     }
-}
-/*
-{
-    queue: "424", 
-    map: "LIVE Ascension Peak", 
-    region: "Europe", 
-    players: [{
-        championCasualAverageAssists: "9.18"
-        championCasualAverageDeaths: "10.26"
-        championCasualAverageKills: "11.96"
-        championCasualGold: 183197
-        championCasualsAssists: 624
-        championCasualsDeaths: 698
-        championCasualsKills: 813
-        championCasualsLosses: 35
-        championCasualsMatches: 68
-        championCasualsWinPer: "48.53"
-        championCasualsWins: 33
-        championId: 2481
-        championName: "Moji"
-        championRankedAssists: 0
-        championRankedAverageAssists: 0
-        championRankedAverageDeaths: 0
-        championRankedAverageKills: 0
-        championRankedDeaths: 0
-        championRankedGold: 0
-        championRankedKills: 0
-        championRankedLosses: 0
-        championRankedMatches: 0
-        championRankedWinPer: 0
-        championRankedWins: 0
-        globalLeavePer: 0
-        globalLosses: 0
-        globalWinPer: 0
-        globalWins: 0
-        globalleaves: 0
-        id: "718149275"
-        level: 73
-        name: "luiskmoxx"
-        nr: 0
-        queueData: {
-            424: "Casual Siege"
-            425: "Practice Siege"
-            428: "Ranked"
-            445: "Test Maps"
-            452: "Casual Onslaught"
-            453: "Practice Onslaught"
-            469: "Casual TDM"
-            470: "Practice TDM"
-        }
-        rank: 0
-        rankData: {
-            1: "Bronze 5", 
-            2: "Bronze 4", 
-            3: "Bronze 3", 
-            4: "Bronze 2", 
-            5: "Bronze 1", 
-            6: "Silver 5", 
-            7: "Silver 4", 
-            8: "Silver 3", 
-            9: "Silver 2", 
-            10: "Silver 1", 
-            11: "Gold 5", 
-            12: "Gold 4", 
-            13: "Gold 3", 
-            14: "Gold 2", 
-            15: "Gold 1", 
-            16: "Platinum 5", 
-            17: "Platinum 4", 
-            18: "Platinum 3", 
-            19: "Platinum 2", 
-            20: "Platinum 1", 
-            21: "Diamond 5", 
-            22: "Diamond 4", 
-            23: "Diamond 3", 
-            24: "Diamond 2", 
-            25: "Diamond 1", 
-            26: "Master", 
-            27: "Grandmaster"
-        }
-        rankedLeavePer: 0
-        rankedLeaves: 0
-        rankedLosses: 0
-        rankedWinPer: 0
-        rankedWins: 0
-        team: 2
-        tp: 0
+    //Show the history
+    showMatchHistory(matches) {
+        $("#matchContainer").addClass("hidden");
+        $("#playerMatchHistory").addClass("show");
+        //Loop through matches
+        matches.forEach((match) => {
+            const map = String(match[0].Map_Game).substr(4);
+            const queue = this.getQueueName(match[0].match_queue_id);
+            $("#playerMatchHistory").append(
+                `<div id="${match[0].Match}" class="match">
+                    <div class="matchInfoContainer">
+                        <div class="matchInfo">${map} (${queue})</div>
+                        <div class="matchTime">${match[0].Entry_Datetime}</div>
+                    </div>
+                    <div class="matchTeam1"></div>
+                    <div class="matchTeam2"></div>
+                </div>`
+            );
+            this.addMatch(match);
+        });
     }
-]
-*/
+    //Add the match to the html
+    addMatch(match) {
+        match.forEach((player) => {
+            //Get the damage values formatted correctly
+            let damage = (player.Damage_Player < 1000) ? player.Damage_Player : (player.Damage_Player / 1000).toFixed(3);
+            let damageTaken = (player.Damage_Taken < 1000) ? player.Damage_Taken : (player.Damage_Taken / 1000).toFixed(3);
+            let Shielding = (player.Damage_Mitigated < 1000) ? player.Damage_Mitigated : (player.Damage_Mitigated / 1000).toFixed(3);
+            let Healing = (player.Healing < 1000) ? player.Healing : (player.Healing / 1000).toFixed(3);
+            let selfHealing = (player.Healing_Player_Self < 1000) ? player.Healing_Player_Self : (player.Healing_Player_Self / 1000).toFixed(3);
+            if(player.playerName.length == 0) player.playerName = "Hidden";
+            //Append the user to the match
+            $(`#${player.Match} .matchTeam${player.TaskForce}`).append(
+                `<div class="historyPlayer">
+                <div class="matchPlayerHeader">
+                    <div class="matchPlayerName">${player.playerName}</div>
+                    <div class="matchPlayerChampion">${player.Reference_Name}</div>
+                </div>
+                <div class="matchPlayerStats">
+                    <div class="matchPlayerKDA">
+                        ${player.Kills_Player} / ${player.Deaths} / ${player.Assists}
+                    </div>
+                    <div class="matchPlayerDamage">
+                        <span class="material-icons">adjust</span>
+                        ${damage}
+                    </div>
+                    <div class="matchPlayerReceived">
+                        <span class="material-icons">flash_on</span>
+                        ${damageTaken}
+                    </div>
+                    <div class="matchPlayerShielding">
+                        <span class="material-icons">admin_panel_settings</span>
+                        ${Shielding}
+                    </div>
+                    <div class="matchPlayerHealing">
+                        <span class="material-icons">healing</span>
+                        ${Healing}
+                    </div>
+                    <div class="matchPlayerSelfHeal">
+                        <span class="material-icons">spa</span>
+                        ${selfHealing}
+                    </div>
+                </div>
+            </div>`
+            );
+        });
+    }
+}

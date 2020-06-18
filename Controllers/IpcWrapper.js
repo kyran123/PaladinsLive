@@ -39,6 +39,13 @@ class wrapper {
             });
         }); 
 
+        //Get match history
+        ipcMain.on("showMatchHistory", (event, data) => {
+            this.paladins.getMatchHistory(data.id, (data) => {
+                event.sender.send("showMatchHistoryData", data);
+            });
+        });
+
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
     showSetup() { BrowserWindow.getFocusedWindow().webContents.send("showSetup"); }
