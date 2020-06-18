@@ -21,7 +21,10 @@ const validChannels = [
     "showMatchHistory",
     "showMatchHistoryData",
     "searchUser",
-    "showUsers"
+    "showUsers",
+    "addToFavorites",
+    "getFavorites",
+    "showFavorites"
 ];
 window.onload = () => {
     // Expose protected methods that allow the renderer process to use

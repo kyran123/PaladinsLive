@@ -7,7 +7,7 @@ $("#Maximize").click(() => {
 $("#close").click(() => {
     window.API.send("quit", {});
 });
-
+favorites = [];
 window.onload = () => {
     $(".showCurrentMatch").click((event) => {
         const userId = $(event.target).parent().attr("id");
@@ -21,7 +21,7 @@ window.onload = () => {
             id: userId
         });
     });
-    $('#searchBtn').click(() => {
+    $('#searchBtn').click((event) => {
         var value = $('#search input').val();
         window.API.send("searchUser", {
             user: value
@@ -38,8 +38,15 @@ window.onload = () => {
     window.API.receive("showUsers", (data) => {
         new dataHandler("players", data);
     });
-
+    window.API.receive("showFavorites", (data) => {
+        console.log(data);
+        //check if no users are saved
+        if(!data.result) return;
+        new dataHandler("favorites", data);
+    });
     
+
+    window.API.send("getFavorites", {});
 }
 
 class dataHandler {
@@ -58,8 +65,11 @@ class dataHandler {
             case "players":
                 this.showPlayers(data.players);
                 break;
+            case "favorites":
+                this.showFavorites(data.users);
+                break;
             default: 
-            console.log(data.msg);
+                console.log(data.msg);
 
         }
     }
@@ -254,16 +264,47 @@ class dataHandler {
         $("#searchResults").empty();
         players.forEach((player) => {
             if(player.hz_player_name == null) return;
+            if(favorites.some(f => f.id === player.player_id)) return;
             $("#searchResults").append(
                 `<div id="p${player.player_id}" class="searchResult">
                     <div class="searchName">${player.Name}</div>
                     <div class="showCurrentMatch noselect">Live</div>
                     <div class="showHistory noselect">History</div>
-                    <div class="favoriteToggle noselect">
-                        <span class="material-icons addToFavorites">star_outline</span>
+                    <div class="favoriteToggle noselect addToFavorites">
+                        <span class="material-icons">star_outline</span>
                     </div>
                 </div>`
             );
+            $(`#p${player.player_id}`).click((event) => {
+                $("#searchResults").empty();
+                const userId = player.player_id;
+                const userName = player.Name;
+                window.API.send("addToFavorites", {
+                    id: userId,
+                    name: userName
+                });
+            });
         });
+    }
+
+    //Show favorites
+    showFavorites(players) {
+        $("#playerFavorites").empty();
+        for(var id in players) {
+            favorites.push({
+                id: id,
+                name: players[id]
+            });
+            $("#playerFavorites").append(
+                `<div id="${id}" class="favorite">
+                    <div class="favoriteName">${players[id]}</div>
+                    <div class="showCurrentMatch noselect">Live</div>
+                    <div class="showHistory noselect">History</div>
+                    <div class="favoriteToggle noselect">
+                        <span class="material-icons">star</span>
+                    </div>
+                </div>`
+            );
+        }
     }
 }

@@ -111,6 +111,17 @@ function loadProgramRequirements() {
 	ipcWrapper.showMainScreen = function() {
 		showMainScreen();
 	};
+	ipcWrapper.addFavorite = function(event, user) {
+		userSettings.addUser(user);
+		userSettings.getUsers((res) => {
+			event.sender.send("showFavorites", res);
+		});
+	}
+	ipcWrapper.getFavorites = function(event) {
+		userSettings.getUsers((res) => {
+			event.sender.send("showFavorites", res);
+		});
+	}
 	ipcWrapper.paladins = paladinsAPI;
 }
 

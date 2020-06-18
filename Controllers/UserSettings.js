@@ -16,6 +16,24 @@ class userSettings {
         }
         return false;
     }
+    //Add an user to the list of favorite users
+    addUser(user) {
+        this.settings.set(`user.${user.id}`, user.name);
+    }
+    //Get favorited users
+    getUsers(callback) {
+        if(this.settings.has('user')) {
+            callback({
+                result: true,
+                users: this.settings.get('user')
+            });
+        } else {
+            callback({
+                result: false,
+                msg: 'Setting \'user\' not found'
+            });
+        }
+    }
     //Check if setting exists
     //[PARAM 1] A string of setting name
     hasSetting(setting, callback) {

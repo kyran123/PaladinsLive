@@ -52,6 +52,16 @@ class wrapper {
             });
         }); 
 
+        //Add player to favorites list
+        ipcMain.on("addToFavorites", (event, data) => {
+            this.addFavorite(event, data);
+        });
+
+        //Get favorites list
+        ipcMain.on("getFavorites", (event, data) => {
+            this.getFavorites(event);
+        });
+
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
     showSetup() { BrowserWindow.getFocusedWindow().webContents.send("showSetup"); }
