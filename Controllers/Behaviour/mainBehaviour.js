@@ -48,12 +48,12 @@ class dataHandler {
             case "live":
                 this.refresh();
                 this.showMatchInfo(data.match);
-                //TODO: toggle match history and match info
+                this.showLiveMatchPanel();
                 break;
             case "history":
                 this.refresh();
                 this.showMatchHistory(data.history);
-                //TODO: toggle match history and match info
+                this.showHistoryPanel();
                 break;
             case "players":
                 this.showPlayers(data.players);
@@ -88,6 +88,17 @@ class dataHandler {
             case 469: return 'Team deathmatch';
             default: return 'Unknown';
         }
+    }
+    showHistoryPanel() {
+        $("#matchContainer").addClass("hidden");
+        $("#playerMatchHistory").addClass("show");
+        $("#playerMatchHistory").removeClass("hidden");
+    }
+    showLiveMatchPanel() {
+        $("#matchContainer").removeClass("hidden");
+        $("#playerMatchHistory").removeClass("show");
+        $("#playerMatchHistory").addClass("hidden");
+
     }
     //Show the match information on screen
     showMatchInfo(data) {
