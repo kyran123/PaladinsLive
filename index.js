@@ -1,5 +1,5 @@
 //Require the electron important things
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, remote, electron } = require('electron');
 const ipcMain = require('electron').ipcMain;
 let screen;
 
@@ -132,8 +132,10 @@ function loadProgramRequirements() {
 function showMainScreen() {
 	//Create new window for the main screen
 	mainWindow = new BrowserWindow({
-		width: (screen.bounds.width / 2),
-		height: (screen.bounds.height / 2),
+		width: (screen.bounds.width / 1.2),
+		height: (screen.bounds.height / 1.2),
+		minWidth: (screen.bounds.width / 5),
+		minHeight: (screen.bounds.height / 5),
 		frame: false,
 		fullscreenable: true,
 		resizable: true,
@@ -160,6 +162,23 @@ function showMainScreen() {
 		// when you should delete the corresponding element.
 		mainWindow = null;
 	});
+
+	mainWindow.on('resize', () => {
+		const appSize = mainWindow.getBounds();
+		if(appSize.width < ((screen.bounds.width / 3) + 5)) {
+			//is vertical layout (e.g. phones)
+			mainWindow.webContents.send("vertical");
+		}
+		else if(appSize.width < ((screen.bounds.width / 2) + 5)) {
+			//Only vertical layout of match container
+			mainWindow.webContents.send("compact");
+		}
+		else {
+			//normal layout
+			mainWindow.webContents.send("normal");
+		}
+	});
+
 	//When the DOM has loaded
 	mainWindow.webContents.once('dom-ready', () => {
 		mainWindow.show();

@@ -44,9 +44,32 @@ window.onload = () => {
         if(!data.result) return;
         new dataHandler("favorites", data);
     });
+    window.API.receive("vertical", () => {
+        console.log("vertical");
+        resetLayouts();
+        $("#matchContainer").addClass("verticalMatchLayout");
+        $("body").addClass("verticalBodyLayout");
+        $("#playerSearchContainer").addClass("verticalResultsLayout");
+    });
+    window.API.receive("compact", () => {
+        console.log("compact");
+        resetLayouts();
+        $("#matchContainer").addClass("compactMatchLayout");
+    });
+    window.API.receive("normal", () => {
+        console.log("normal");
+        resetLayouts();
+    });
     
 
     window.API.send("getFavorites", {});
+}
+
+function resetLayouts() {
+    $("#matchContainer").removeClass("verticalMatchLayout");
+    $("body").removeClass("verticalBodyLayout");
+    $("#matchContainer").removeClass("compactMatchLayout");
+    $("#playerSearchContainer").removeClass("verticalResultsLayout");
 }
 
 class dataHandler {
@@ -305,7 +328,7 @@ class dataHandler {
                     </div>
                 </div>`
             );
-            $(`#${id}`).click((event) => {
+            $(`#${id} .favoriteToggle`).click((event) => {
                 favorites.some(f => {
                     if(f.id === id) {
                         favorites.splice(favorites.indexOf(f), 1);

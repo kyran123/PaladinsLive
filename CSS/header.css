@@ -1,18 +1,19 @@
 #header {
     grid-area:                  nav;
     min-height:                 20px;
-    height:                     100%;
+    height:                     minmax(16px, 3vh);
+    width:                      100vw;
     padding-left:               10px;
     background:                 #111;
     display: grid;
-    grid-template-columns: 1fr 3vh 3vh 3vh;
+    grid-template-columns: 1fr minmax(16px, 3vh) minmax(16px, 3vh) minmax(16px, 3vh);
 }
 #logo {
-    height:                     3vh;
+    height:                     minmax(16px, 3vh);
     -webkit-app-region:         drag;
 }
 #logo:before {
-    height:                     3vh;
+    height:                     minmax(16px, 3vh);
     content:                    'Paladins';
     font-family:                Raleway;
     font-size:                  small;
@@ -29,11 +30,10 @@
 }
 #header span {
     width:                      3vh;
-    height:                     3vh;
     color:                      #fff;
     font-size:                  1.1em;
     text-align:                 center;
-    line-height:                3vh;
+    vertical-align:             middle;
 }
 #Minimize:hover, #Maximize:hover, #close:hover {
     cursor:                     pointer;

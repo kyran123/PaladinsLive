@@ -7,7 +7,9 @@
     grid-template-rows: min-content min-content 4fr min-content 1fr;
     grid-gap: 10px;
 }
-
+.verticalResultsLayout {
+    grid-template-rows: min-content min-content 1fr min-content 2fr !important;    
+}
 #searchTitle {
     color: #fff;
     font-family: Work-sans;

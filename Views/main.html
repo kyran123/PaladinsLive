@@ -31,20 +31,12 @@
         </div>
 
         <div id="playerSearchContainer">
+            <span id="searchTitle">Search player: </span>
             <div id="search">
-                <span>Search player: </span>
                 <input type="text" />
+                <div id="searchBtn">Search</div>
             </div>
-            <div id="searchResults">
-                <div class="searchResult">
-                    <div class="searchName">Kyran123</div>
-                    <div class="showCurrentMatch noselect">Live</div>
-                    <div class="showHistory noselect">History</div>
-                    <div class="favoriteToggle noselect">
-                        <span class="material-icons">star_outline</span>
-                    </div>
-                </div>
-            </div>
+            <div id="searchResults"></div>
             <div class="favoritesText">Favorites:</div>
             <div id="playerFavorites">
                 <div id="555592" class="favorite">
@@ -67,7 +59,7 @@
         </div>
 
         
-        <div id="matchContainer" class="hidden">
+        <div id="matchContainer">
             <div id="matchDetails">
                 Frog Isle (Casual, Europe)
             </div>
@@ -103,54 +95,8 @@
             </div>
         </div>
 
-        <div id="playerMatchHistory" class="show">
-
-            <div class="match">
-                <div class="matchInfoContainer">
-                    <div class="matchInfo">Frog Isle (Casual, Europe)</div>
-                    <div class="matchTime">6/16/2020 6:55:17 PM</div>
-                </div>
-                <div class="matchTeam1">
-                    <div class="historyPlayer">
-                        <div class="matchPlayerHeader">
-                            <div class="matchPlayerName">Kyran123</div>
-                            <div class="matchPlayerChampion">Furia</div>
-                        </div>
-                        <div class="matchPlayerStats">
-                            <div class="matchPlayerKDA">
-                                13 / 9 / 21
-                            </div>
-                            <div class="matchPlayerDamage">
-                                <span class="material-icons">adjust</span>
-                                123.237
-                            </div>
-                            <div class="matchPlayerReceived">
-                                <span class="material-icons">flash_on</span>
-                                62.937
-                            </div>
-                            <div class="matchPlayerShielding">
-                                <span class="material-icons">admin_panel_settings</span>
-                                0
-                            </div>
-                            <div class="matchPlayerHealing">
-                                <span class="material-icons">healing</span>
-                                0
-                            </div>
-                            <div class="matchPlayerSelfHeal">
-                                <span class="material-icons">spa</span>
-                                14.928
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="matchTeam2">
-
-                </div>
-            </div>
-
-        </div>
+        <div id="playerMatchHistory" class="hidden"></div>
 
     </body>
-    <script src="../Libraries/EQCSS.min.js" defer></script>
     <script src="../Controllers/Behaviour/mainBehaviour.js" defer></script>
 </html>
