@@ -18,7 +18,8 @@ class PaladinsAPI {
             liveMatch: 'getmatchplayerdetailsJson',
             queueStats: 'getqueuestatsJson',
             matchHistory: 'getmatchhistoryJson',
-            matchDetails: 'getmatchdetailsbatchJson'
+            matchDetails: 'getmatchdetailsbatchJson',
+            getPlayers: 'searchplayersJson'
         }
     }
     //Session
@@ -251,6 +252,19 @@ class PaladinsAPI {
         }
         catch(err) {
             console.log("[PaladinsAPI.js]:getMatchHistory() " + err); 
+        }
+    }
+
+    //Search for players
+    async getPlayers(userName, callback) {
+        try {
+            await this.getSessionIfNeeded();
+            const players = await axios.get(`${this.apiLink}/${this.methods.getPlayers}/${this.user.devId}/${this.getSignature('searchplayers')}/${this.session}/${this.timeStamp()}/${userName}`);
+            callback({ result: true, players: players.data });
+        }
+        catch(err) {
+            console.dir(err, {depth: null});
+            console.log("[PaladinsAPI.js]:getPlayers() " + err);
         }
     }
 }

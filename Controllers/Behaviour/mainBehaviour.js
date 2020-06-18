@@ -21,13 +21,25 @@ window.onload = () => {
             id: userId
         });
     });
+    $('#searchBtn').click(() => {
+        var value = $('#search input').val();
+        window.API.send("searchUser", {
+            user: value
+        });
+    });
+
+
     window.API.receive("showLiveMatchData", (data) => {
         new dataHandler("live", data);
     });
     window.API.receive("showMatchHistoryData", (data) => {
-        console.log(data);
         new dataHandler("history", data);
     });
+    window.API.receive("showUsers", (data) => {
+        new dataHandler("players", data);
+    });
+
+    
 }
 
 class dataHandler {
@@ -36,10 +48,15 @@ class dataHandler {
             case "live":
                 this.refresh();
                 this.showMatchInfo(data.match);
+                //TODO: toggle match history and match info
                 break;
             case "history":
                 this.refresh();
                 this.showMatchHistory(data.history);
+                //TODO: toggle match history and match info
+                break;
+            case "players":
+                this.showPlayers(data.players);
                 break;
             default: 
             console.log(data.msg);
@@ -217,6 +234,24 @@ class dataHandler {
                     </div>
                 </div>
             </div>`
+            );
+        });
+    }
+
+    //Show the players found from the username the user has given
+    showPlayers(players) {
+        $("#searchResults").empty();
+        players.forEach((player) => {
+            if(player.hz_player_name == null) return;
+            $("#searchResults").append(
+                `<div id="p${player.player_id}" class="searchResult">
+                    <div class="searchName">${player.Name}</div>
+                    <div class="showCurrentMatch noselect">Live</div>
+                    <div class="showHistory noselect">History</div>
+                    <div class="favoriteToggle noselect">
+                        <span class="material-icons addToFavorites">star_outline</span>
+                    </div>
+                </div>`
             );
         });
     }

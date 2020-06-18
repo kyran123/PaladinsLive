@@ -33,18 +33,24 @@ class wrapper {
 
         //Get live match details
         ipcMain.on("showLiveMatch", (event, data) => {
-            this.paladins.getLiveMatchData(data.id, (data) => {
-                console.log(data);
-                event.sender.send("showLiveMatchData", data);
+            this.paladins.getLiveMatchData(data.id, (res) => {
+                event.sender.send("showLiveMatchData", res);
             });
         }); 
 
         //Get match history
         ipcMain.on("showMatchHistory", (event, data) => {
-            this.paladins.getMatchHistory(data.id, (data) => {
-                event.sender.send("showMatchHistoryData", data);
+            this.paladins.getMatchHistory(data.id, (res) => {
+                event.sender.send("showMatchHistoryData", res);
             });
         });
+
+        //Get players
+        ipcMain.on("searchUser", (event, data) => {
+            this.paladins.getPlayers(data.user, (res) => {
+                event.sender.send("showUsers", res);
+            });
+        }); 
 
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
