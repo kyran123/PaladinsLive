@@ -20,6 +20,10 @@ class userSettings {
     addUser(user) {
         this.settings.set(`user.${user.id}`, user.name);
     }
+    //remove an user from the favorites list
+    removeUser(id) {
+        this.settings.delete(`user.${id}`);
+    }
     //Get favorited users
     getUsers(callback) {
         if(this.settings.has('user')) {

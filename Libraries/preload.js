@@ -24,7 +24,8 @@ const validChannels = [
     "showUsers",
     "addToFavorites",
     "getFavorites",
-    "showFavorites"
+    "showFavorites",
+    "removeFromFavorites"
 ];
 window.onload = () => {
     // Expose protected methods that allow the renderer process to use

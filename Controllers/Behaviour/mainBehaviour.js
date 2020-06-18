@@ -305,6 +305,18 @@ class dataHandler {
                     </div>
                 </div>`
             );
+            $(`#${id}`).click((event) => {
+                favorites.some(f => {
+                    if(f.id === id) {
+                        favorites.splice(favorites.indexOf(f), 1);
+                        return true;
+                    }
+                    return false;
+                });
+                window.API.send("removeFromFavorites", {
+                    id: id
+                });
+            });
         }
     }
 }

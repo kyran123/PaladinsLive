@@ -62,6 +62,11 @@ class wrapper {
             this.getFavorites(event);
         });
 
+        //Remove from favorites list
+        ipcMain.on("removeFromFavorites", (event, data) => {
+            this.removeFavorite(event, data.id);
+        });
+
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
     showSetup() { BrowserWindow.getFocusedWindow().webContents.send("showSetup"); }

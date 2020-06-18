@@ -122,6 +122,10 @@ function loadProgramRequirements() {
 			event.sender.send("showFavorites", res);
 		});
 	}
+	ipcWrapper.removeFavorite = function(event, id) {
+		userSettings.removeUser(id);
+		ipcWrapper.getFavorites(event);
+	} 
 	ipcWrapper.paladins = paladinsAPI;
 }
 
