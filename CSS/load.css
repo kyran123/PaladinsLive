@@ -52,9 +52,12 @@ body {
     height:                     100%;
     font-size:                  1.5em;
     font-family:                Cornerstone;
-    color:                      #F3E7C7;
+    color:                      #fff;
     font-weight:                500;
     text-align:                 center;
+}
+#centeredLogo span {
+    color:                      #A2DDEB !important;
 }
 #setupContainer {
     position:                   fixed;

@@ -13,7 +13,8 @@
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "electron": "^9.0.3",
-    "electron-settings": "^4.0.0",
+    "electron-store": "^5.2.0",
+    "md5": "^2.2.1",
     "moment": "^2.26.0"
   }
 }
