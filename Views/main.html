@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="../CSS/main.css" />
+        <link type="text/css" rel="stylesheet" href="../CSS/player.css" />
+        <link type="text/css" rel="stylesheet" href="../CSS/match.css" />
+        <link type="text/css" rel="stylesheet" href="../CSS/header.css" />
+        <link type="text/css" rel="stylesheet" href="../CSS/search.css" />
+
+        
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="../Libraries/Materialize/materialize.min.css"  media="screen,projection"/>
+
+
+        <!-- Jquery library -->
+        <script src="../Libraries/Jquery/jquery-3.5.1.min.js" defer></script>
+        <!-- Materialize library -->
+        <script type="text/javascript" src="../Libraries/Materialize/materialize.min.js" defer></script>
+    </head>
+    <body>
+        
+        <div id="header">
+            <div id="logo"></div>
+            <div id="Minimize" class="noselect"><span class="material-icons">minimize</span></div>
+            <div id="Maximize" class="noselect"><span class="material-icons">fullscreen</span></div>
+            <div id="close" class="noselect"><span class="material-icons">close</span></div>
+        </div>
+
+        <div id="playerSearchContainer">
+            <span id="searchTitle">Search player: </span>
+            <div id="search">
+                <input type="text" />
+                <div id="searchBtn">Search</div>
+            </div>
+            <div id="searchResults"></div>
+            <div class="favoritesText">Favorites:</div>
+            <div id="playerFavorites">
+                
+            </div>
+        </div>
+
+        
+        <div id="matchContainer">
+            <div id="matchDetails">
+                
+            </div>
+            <div id="teamContainer1" class="teamContainer">
+                
+            </div>
+
+            <div id="matchInfo">
+                <div id="matchRankInfoTitle">
+                    <div id="averageRankTitle">Team averages:</div>
+                    <div id="team1Average" class="ri">
+                        Team 1 <br/>
+                        <span>
+                            
+                        </span>
+                    </div>
+                    <div id="team2Average" class="ri">
+                        Team 2 <br/>
+                        <span>
+                            
+                        </span>
+                    </div>
+                </div>
+                <div id="expectedWinChance">
+                    <span>Estimated win chance:</span>
+                    <div id="team1WinChance"></div>
+                    <div id="team2WinChance"></div>
+                </div>
+            </div>
+
+            <div id="teamContainer2" class="teamContainer">
+
+            </div>
+        </div>
+
+        <div id="playerMatchHistory" class="hidden"></div>
+
+    </body>
+    <script src="../Controllers/Behaviour/mainBehaviour.js" defer></script>
+</html>

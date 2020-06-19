@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="../CSS/load.css" />
+        <!-- Jquery library -->
+        <script src="../Libraries/Jquery/jquery-3.5.1.min.js"></script>
+    </head>
+    <body>
+        <div></div>
+        <div id="centeredLogo" class="noselect">Paladins<span>Live</span></div>
+        <div></div>
+        <div id="setupContainer" class="hidden">
+            <span id="devIdText">Developer id:</span>
+            <input type="text" id="devId" />
+            <span id="apiKeyText">API key:</span>
+            <input type="text" id="apiKey" /> 
+            <div id="submitBtn">Submit</div>
+        </div>
+    </body>
+    <script>
+        window.onload = () => {
+            //Receive functions
+            window.API.receive("showSetup", () => {
+                $("#setupContainer").removeClass("hidden");
+            });
+            //UI interactions
+            $("#devId").on('keydown', () => {
+                $("#devId").removeClass("error");
+            });
+            $("#apiKey").on("keydown", () => {
+                $("#apiKey").removeClass("error");
+            });
+            $("#submitBtn").click(function() {
+                const devId = $("#devId").val();
+                const authKey = $("#apiKey").val();
+                //Check if user put something in text boxes
+                if(devId === null) { $("#devId").addClass("error"); return; }
+                if(authKey === null) { $("#apiKey").addClass("error"); return; }
+                if(devId.length > 0 && authKey.length > 0) {
+                    //send request
+                    window.API.send("authenticate", {
+                        devId: devId,
+                        authKey: authKey
+                    });
+                }
+            });
+            
+        }
+    </script>
+</html>

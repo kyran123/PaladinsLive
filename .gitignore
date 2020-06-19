@@ -1,0 +1,7 @@
+/Assets
+Libraries/Jquery
+Libraries/Materialize
+/node_modules
+*.exe
+.env
+Research.txt

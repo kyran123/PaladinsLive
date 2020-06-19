@@ -1,0 +1,81 @@
+@font-face {
+    font-family: "Raleway";
+    src: url("../Assets/Fonts/Raleway/Raleway-Regular.ttf");
+}
+@font-face {
+    font-family: "Encode-sans";
+    src: url("../Assets/Fonts/encode-sans/EncodeSansCondensed-Regular.ttf");
+}
+@font-face {
+    font-family: "Encode-sans-condensed";
+    src: url("../Assets/Fonts/encode-sans/EncodeSansCondensed-Regular.ttf");
+}
+@font-face {
+    font-family: "Roboto";
+    src: url("../Assets/Fonts/roboto-2014/Roboto-Regular.ttf");
+}
+@font-face {
+    font-family: "Roboto-condensed";
+    src: url("../Assets/Fonts/roboto-2014/RobotoCondensed-Regular.ttf");
+}
+@font-face {
+    font-family: "Work-sans";
+    src: url("../Assets/Fonts/work-sans/WorkSans-Regular.otf");
+}
+@font-face {
+    font-family: "Yi-Baiti";
+    src: url("../Assets/Fonts/Yi-Baiti/msyi.ttf");
+}
+
+/*
+ * Primary color: #1a1a1d
+ * Secundary color: #41413F
+ * Accent 1 color: #DF775C
+ * Accent 2 color: #846A59
+ * Text color: #F3E7C7
+*/
+
+.hidden {
+    display: none !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+
+
+
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-areas: 'nav nav'
+                         'playerSearch matchDetails';
+    grid-template-columns: minmax(200px, 20vw) 80vw;
+    grid-template-rows: minmax(20px, 3vh) 97vh;
+}
+.verticalBodyLayout {
+    grid-template-areas: 'nav' 
+                         'playerSearch'
+                         'matchDetails';
+    grid-template-columns: 100vw;
+    grid-template-rows: minmax(24px, 3vh) minmax(10vw, 30vh) 1fr;
+}
+#playerSearchContainer {
+    grid-area: playerSearch;
+    width: 100%;
+    height: 100%;
+}
