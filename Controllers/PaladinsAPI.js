@@ -137,6 +137,13 @@ class PaladinsAPI {
                                     .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get player - error: " + err); });
             //Get the player data in a JS object
             const PlayerJSobject = player.data[0];
+            //In case there is a bot
+            if(PlayerJSobject == null) {
+                playerObj.setPlayerRank(0, 0, 0, 0, 0, 0, 0, 0);
+                playerObj.setPlayerCasualChampion(0, 0, 0, 0, 0, 0, 0);
+                playerObj.setPlayerRankedChampion(0, 0, 0, 0, 0, 0, 0);
+                return;
+            }
             //Check if user is KBM
             if(PlayerJSobject.Tier_RankedKBM > 0) {
                 playerObj.setPlayerRank(

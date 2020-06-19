@@ -64,7 +64,7 @@ body {
     display: grid;
     grid-template-areas: 'nav nav'
                          'playerSearch matchDetails';
-    grid-template-columns: minmax(300px, 20vw) 80vw;
+    grid-template-columns: minmax(200px, 20vw) 80vw;
     grid-template-rows: minmax(20px, 3vh) 97vh;
 }
 .verticalBodyLayout {
@@ -72,7 +72,7 @@ body {
                          'playerSearch'
                          'matchDetails';
     grid-template-columns: 100vw;
-    grid-template-rows: minmax(16px, 3vh) minmax(10vw, 30vh) 1fr;
+    grid-template-rows: minmax(24px, 3vh) minmax(10vw, 30vh) 1fr;
 }
 #playerSearchContainer {
     grid-area: playerSearch;

@@ -5,6 +5,7 @@
     padding: 10px;
     display: grid;
     grid-template-rows: min-content min-content 4fr min-content 1fr;
+    grid-template-columns: 100%;
     grid-gap: 10px;
 }
 .verticalResultsLayout {
@@ -21,7 +22,6 @@
     grid-template-columns: 1fr min-content;
 }
 #search input {
-    width: -webkit-fill-available;
     border: none;
     background: #1a1a1d;
     border-radius: 5px;

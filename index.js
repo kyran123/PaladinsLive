@@ -169,7 +169,7 @@ function showMainScreen() {
 			//is vertical layout (e.g. phones)
 			mainWindow.webContents.send("vertical");
 		}
-		else if(appSize.width < ((screen.bounds.width / 2) + 5)) {
+		else if(appSize.width < ((screen.bounds.width / 1.5) + 5)) {
 			//Only vertical layout of match container
 			mainWindow.webContents.send("compact");
 		}

@@ -42,7 +42,7 @@ module.exports = class match {
 
         //Loop through all players
         this.players.forEach((player) => {
-            const index = (player.team - 1);
+            const index = (parseInt(player.team) - 1);
             //Add to player rank totals
             if(player.rank > 0) {
                 teamsTotalRankDivide[index]++;
@@ -65,14 +65,14 @@ module.exports = class match {
                 teamsTotalWinPer[index] += parseInt(player.championRankedWinPer);
             }
             //Get average champion kills for the player
-            if(teamsTotalChampionKills[Index] > 0) teamsTotalChampionKills[index] += (parseInt(player.championCasualsKills) + parseInt(player.championRankedKills));
+            if(teamsTotalChampionKills[index] > 0) teamsTotalChampionKills[index] += (parseInt(player.championCasualsKills) + parseInt(player.championRankedKills));
             //Get average champion deaths for the player
-            if(teamsTotalChampionDeaths[Index] > 0) teamsTotalChampionDeaths[index] += (parseInt(player.championCasualsDeaths) + parseInt(player.championRankedDeaths));
+            if(teamsTotalChampionDeaths[index] > 0) teamsTotalChampionDeaths[index] += (parseInt(player.championCasualsDeaths) + parseInt(player.championRankedDeaths));
             //Get the average champion assists for the player
-            if(teamsTotalChampionAssists[Index] > 0) teamsTotalChampionAssists[index] += (parseInt(player.championCasualsAssists) + parseInt(player.championRankedAssists));
+            if(teamsTotalChampionAssists[index] > 0) teamsTotalChampionAssists[index] += (parseInt(player.championCasualsAssists) + parseInt(player.championRankedAssists));
 
             //Get the teams total games with champion played
-            if(teamsTotalChampionGames[Index] > 0) teamsTotalChampionGames[index] += (parseInt(player.championRankedMatches) + parseInt(championCasualsMatches));
+            if(teamsTotalChampionGames[index] > 0) teamsTotalChampionGames[index] += (parseInt(player.championRankedMatches) + parseInt(championCasualsMatches));
         });
 
         for(var i = 0; i < 2; i++) {

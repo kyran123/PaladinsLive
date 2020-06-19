@@ -1,12 +1,12 @@
 #header {
     grid-area:                  nav;
     min-height:                 20px;
-    height:                     minmax(16px, 3vh);
+    height:                     100%;
     width:                      100vw;
     padding-left:               10px;
     background:                 #111;
     display: grid;
-    grid-template-columns: 1fr minmax(16px, 3vh) minmax(16px, 3vh) minmax(16px, 3vh);
+    grid-template-columns: 1fr minmax(20px, 3vh) minmax(20px, 3vh) minmax(20px, 3vh);
 }
 #logo {
     height:                     minmax(16px, 3vh);

@@ -11,7 +11,6 @@
     grid-template-rows:         25px 1fr;
 }
 .compactMatchLayout {
-    width:                      calc(100vw - 310px) !important;
     padding:                    5px !important;
     padding-top:                5px !important;
     grid-template-areas:        'details details'
@@ -19,6 +18,8 @@
                                 'team1 team2' !important;
     grid-template-columns:      1fr 1fr !important;
     grid-template-rows:         25px min-content 1fr !important;
+    grid-gap:                   10px;
+    overflow-y:                 scroll;
 }
 .compactMatchLayout #team1Average, .compactMatchLayout #team2Average {
     height: 5vh;
@@ -33,6 +34,9 @@
     text-align: left;
     padding-left: 5vh;
 }
+.compactMatchLayout .playerInfoStats, .compactMatchLayout .champInfoStats {
+    font-size: 11px !important;
+}
 .verticalMatchLayout {
     grid-template-areas:        'details'
                                 'team1' 
@@ -40,6 +44,7 @@
                                 'team2' !important;
     grid-template-columns:      1fr !important;
     grid-template-rows:         25px min-content min-content min-content !important;
+    overflow-y: scroll;
 }
 
 #teamContainer1 {
@@ -92,7 +97,7 @@
     text-align: center !important;
 }
 #expectedWinChance {
-    margin-top: minmax(16px, 3vh);
+    margin-top: 5%;
     display: grid;
     grid-template-areas: 'ewcTitle ewcTitle'
                          'e1 e2';

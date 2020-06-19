@@ -9,18 +9,6 @@ $("#close").click(() => {
 });
 favorites = [];
 window.onload = () => {
-    $(".showCurrentMatch").click((event) => {
-        const userId = $(event.target).parent().attr("id");
-        window.API.send("showLiveMatch", {
-            id: userId
-        });
-    });
-    $(".showHistory").click((event) => {
-        const userId = $(event.target).parent().attr("id");
-        window.API.send("showMatchHistory", {
-            id: userId
-        });
-    });
     $('#searchBtn').click((event) => {
         var value = $('#search input').val();
         window.API.send("searchUser", {
@@ -39,25 +27,21 @@ window.onload = () => {
         new dataHandler("players", data);
     });
     window.API.receive("showFavorites", (data) => {
-        console.log(data);
         //check if no users are saved
         if(!data.result) return;
         new dataHandler("favorites", data);
     });
     window.API.receive("vertical", () => {
-        console.log("vertical");
         resetLayouts();
         $("#matchContainer").addClass("verticalMatchLayout");
         $("body").addClass("verticalBodyLayout");
         $("#playerSearchContainer").addClass("verticalResultsLayout");
     });
     window.API.receive("compact", () => {
-        console.log("compact");
         resetLayouts();
         $("#matchContainer").addClass("compactMatchLayout");
     });
     window.API.receive("normal", () => {
-        console.log("normal");
         resetLayouts();
     });
     
@@ -131,10 +115,10 @@ class dataHandler {
         $("#matchContainer").removeClass("hidden");
         $("#playerMatchHistory").removeClass("show");
         $("#playerMatchHistory").addClass("hidden");
-
     }
     //Show the match information on screen
     showMatchInfo(data) {
+        console.log(data);
         //Show map, queue and region info
         const map = String(data.map).substr(4);
         const queue = this.getQueueName(data.queue);
@@ -143,7 +127,7 @@ class dataHandler {
         $("#team1Average").addClass("r" + Math.round(data.teams[0].averageRank));
         $("#team1Average").addClass("ri");
         $("#team1Average span").append(data.teams[0].averageLevel + "<br/>" + data.teams[0].averageWinPer + "%");
-        $("#team2Average").addClass("r" + Match.round(data.teams[1].averageRank));
+        $("#team2Average").addClass("r" + Math.round(data.teams[1].averageRank));
         $("#team2Average").addClass("ri");
         $("#team2Average span").append(data.teams[1].averageLevel + "<br/>" + data.teams[1].averageWinPer + "%");
         $("#team1WinChance").append(data.teams[0].chance.toFixed(2) + "%");
@@ -298,13 +282,25 @@ class dataHandler {
                     </div>
                 </div>`
             );
-            $(`#p${player.player_id}`).click((event) => {
+            $(`#p${player.player_id} .addToFavorites`).click((event) => {
                 $("#searchResults").empty();
                 const userId = player.player_id;
                 const userName = player.Name;
                 window.API.send("addToFavorites", {
                     id: userId,
                     name: userName
+                });
+            });
+            $(".showCurrentMatch").click((event) => {
+                const userId = player.player_id;
+                window.API.send("showLiveMatch", {
+                    id: userId
+                });
+            });
+            $(".showHistory").click((event) => {
+                const userId = player.player_id;
+                window.API.send("showMatchHistory", {
+                    id: userId
                 });
             });
         });
@@ -338,6 +334,18 @@ class dataHandler {
                 });
                 window.API.send("removeFromFavorites", {
                     id: id
+                });
+            });
+            $(".showCurrentMatch").click((event) => {
+                const userId = $(event.target).parent().attr("id");
+                window.API.send("showLiveMatch", {
+                    id: userId
+                });
+            });
+            $(".showHistory").click((event) => {
+                const userId = $(event.target).parent().attr("id");
+                window.API.send("showMatchHistory", {
+                    id: userId
                 });
             });
         }

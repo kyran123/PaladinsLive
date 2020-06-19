@@ -12,7 +12,37 @@
     }
 }
 
-
+.compactMatchLayout .playerContainer {
+    grid-template-areas: 'img'
+                         'player'
+                         'champion';
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr 1fr;
+}
+.compactMatchLayout .playerContainer .ri {
+    background-size: contain !important;
+}
+.compactMatchLayout .playerContainer  .playerChampion {
+    line-height: 150%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.compactMatchLayout .playerImage {
+    grid-template-areas: 'playerName champName playerLevel';
+    grid-template-rows: 1fr !important;
+    grid-template-columns: 1fr 1fr min-content !important;
+    background: #111 !important;
+}
+.compactMatchLayout .playerName {
+    display: block !important;
+}
+.compactMatchLayout .playerName, .compactMatchLayout .playerChampion, .compactMatchLayout .playerLevel {
+    font-family: Work-sans !important;
+    font-size: 1em !important;
+}
+.compactMatchLayout .playerInfoText {
+    display: none !important;
+}
 .playerContainer {
     background: linear-gradient(#27272B 50%, #303036 50%);
     padding: 2%;
