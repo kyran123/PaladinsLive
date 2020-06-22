@@ -7,7 +7,7 @@ This is a personal initiated project with my own personal use in mind. You can s
 
 ## Prerequisits
 
-You will need your own autherization key from HiRez before using this program.
+You will need your own autherization key from Hi-Rez before using this program.
 Simply download and double click the downloaded file for your own operating system from [Releases](https://github.com/kyran123/PaladinsLive/releases)
 
 ## Contributing
