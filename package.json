@@ -1,14 +1,14 @@
 {
-  "name": "paladinslive",
+  "name": "PaladinsLive",
   "version": "1.0.0",
-  "description": "",
+  "description": "A statistics tracker for the free multiplayer game Paladins.",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . AnimeTracker --platform=win32 --arch=x64"
   },
   "author": "Kyle Fransen",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
