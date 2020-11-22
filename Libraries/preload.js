@@ -4,16 +4,6 @@ const {
 } = require("electron");
 
 const validChannels = [
-    "quit",
-    "closeFocusedWindow",
-    "closeAllWindows",
-    "closeWindow",
-    "showWindow",
-    "showAll",
-    "minimize",
-    "minimizeAll",
-    "maximize",
-    "maximizeAll",
     "showSetup",
     "showLiveMatch",
     "authenticate",
@@ -24,8 +14,8 @@ const validChannels = [
     "showUsers",
     "addToFavorites",
     "getFavorites",
+    "updateFavorite",
     "showFavorites",
-    "removeFromFavorites",
     "vertical",
     "normal",
     "compact"

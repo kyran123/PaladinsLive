@@ -1,6 +1,9 @@
 /Assets
+/dist
+/PaladinsLive
 Libraries/Jquery
 Libraries/Materialize
+Libraries/Vue
 /node_modules
 *.exe
 .env

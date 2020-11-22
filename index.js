@@ -132,15 +132,14 @@ function loadProgramRequirements() {
 function showMainScreen() {
 	//Create new window for the main screen
 	mainWindow = new BrowserWindow({
-		width: (screen.bounds.width / 1.2),
-		height: (screen.bounds.height / 1.2),
-		minWidth: (screen.bounds.width / 5),
-		minHeight: (screen.bounds.height / 5),
-		frame: false,
+		width: screen.bounds.width,
+		height:screen.bounds.height,
 		fullscreenable: true,
+		autoHideMenuBar: true,
 		resizable: true,
 		show: false,
-		backgroundColor: '#1a1a1d',
+		icon: './Assets/Build/PL.ico',
+		backgroundColor: '#1E1E1E',
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: true,

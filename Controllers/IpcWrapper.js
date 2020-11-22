@@ -53,18 +53,17 @@ class wrapper {
         }); 
 
         //Add player to favorites list
-        ipcMain.on("addToFavorites", (event, data) => {
-            this.addFavorite(event, data);
+        ipcMain.on("updateFavorite", (event, data) => {
+            if(data.value) {
+                this.addFavorite(event, data.user);
+            } else {
+                this.removeFavorite(event, data.user.id);
+            }
         });
 
         //Get favorites list
         ipcMain.on("getFavorites", (event, data) => {
             this.getFavorites(event);
-        });
-
-        //Remove from favorites list
-        ipcMain.on("removeFromFavorites", (event, data) => {
-            this.removeFavorite(event, data.id);
         });
 
     }

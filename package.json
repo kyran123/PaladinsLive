@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . AnimeTracker --platform=win32 --arch=x64"
+    "build": "electron-packager . paladinslive --platform=win32 --arch=x64"
   },
   "author": "Kyle Fransen",
   "license": "MIT",

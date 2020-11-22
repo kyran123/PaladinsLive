@@ -4,8 +4,6 @@ const md5 = require('md5');
 
 let Match = require('../Models/Match.js');
 let Player = require('../Models/Player.js');
-const { nextTick } = require('process');
-const { resolve } = require('path');
 
 class PaladinsAPI {
     constructor() {
@@ -130,7 +128,8 @@ class PaladinsAPI {
                 playerInfo.Account_Level, 
                 playerInfo.taskForce,
                 playerInfo.ChampionId, 
-                playerInfo.ChampionName
+                playerInfo.ChampionName,
+                playerInfo.ChampionName.replace(/\s+/g, '-')
             ));
             //Get the player rank
             const player = await axios.get(`${this.apiLink}/${this.methods.player}/${this.user.devId}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
@@ -236,13 +235,17 @@ class PaladinsAPI {
             await this.getSessionIfNeeded();
             const playerHistory = await axios.get(`${this.apiLink}/${this.methods.matchHistory}/${this.user.devId}/${this.getSignature('getmatchhistory')}/${this.session}/${this.timeStamp()}/${playerId}`);
             let matchIds = '';
-            for(var i = 0; i < 5; i++) {
+            for(var i = 0; i < 10; i++) {
                 matchIds += playerHistory.data[i].Match;
-                if(i < 4) {
+                if(i < 9) {
                     matchIds += ",";
                 }
             }
             const matchHistory = await axios.get(`${this.apiLink}/${this.methods.matchDetails}/${this.user.devId}/${this.getSignature('getmatchdetailsbatch')}/${this.session}/${this.timeStamp()}/${matchIds}`);
+
+            let matchData = [];
+            let isWon = false;
+
             let matches = [];
             let match = [];
             let lastId = matchHistory.data[0].Match;
@@ -252,10 +255,40 @@ class PaladinsAPI {
                     matches.push(match);
                     match = [];
                 }
+                if(parseInt(player.playerId) == playerId) {
+                    if(player.Win_Status == 'Winner') {
+                        isWon = true;
+                    } else {
+                        isWon = false;
+                    }
+                }
+                if(matchData.length == 0) {
+                    matchData.push({
+                        id: player.Match,
+                        user: playerId,
+                        isWon: isWon,
+                        duration: player.Time_In_Match_Seconds,
+                        map: player.Map_Game,
+                        mode: player.match_queue_id
+                    });
+                    isWon = false;
+                } else {
+                    if(player.Match !== matchData[matchData.length - 1].id) {
+                        matchData.push({
+                            id: player.Match,
+                            user: playerId,
+                            isWon: isWon,
+                            duration: player.Time_In_Match_Seconds,
+                            map: player.Map_Game,
+                            mode: player.match_queue_id
+                        });
+                        isWon = false;
+                    }
+                }
                 match.push(player);
             });
             matches.push(match);
-            callback({ result: true, history: matches });
+            callback({ result: true, history: matches, matchData: matchData });
         }
         catch(err) {
             console.log("[PaladinsAPI.js]:getMatchHistory() " + err); 

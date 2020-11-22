@@ -32,7 +32,7 @@ module.exports = class Player {
         27: 'Grandmaster'
     }
 
-    constructor(player_nr, player_id, player_name, player_level, player_team, champion_id, champion_name, queue_id, map_name) {
+    constructor(player_nr, player_id, player_name, player_level, player_team, champion_id, champion_name, champion_name_formatted, queue_id, map_name) {
         //Player variables
         this.nr = (player_nr == null) ? "": player_nr;
         this.id = (player_id == null) ? 0 : player_id;
@@ -43,6 +43,7 @@ module.exports = class Player {
         //Champion variables
         this.championId = (champion_id == null) ? 0 : champion_id;
         this.championName = (champion_name == null) ? "" : champion_name;
+        this.championNameFormatted = (champion_name_formatted == null) ? "" : champion_name_formatted;
 
         //create variables
         this.rank = 0;
