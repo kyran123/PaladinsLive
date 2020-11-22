@@ -12,7 +12,7 @@ const mainMenu = Vue.component('main-menu', {
             </div>
             <div class="searchResults">
                 <div v-for="user in getSearchedUsers" :key="user.player_id" class="searchResult">
-                    <div class="searchName">{{user.playerName}}</div>
+                    <div class="searchName">{{user.Name}}</div>
                     <div class="showCurrentMatch noselect" @click="showLiveMatch(user.player_id)">Live</div>
                     <div class="showHistory noselect" @click="showHistory(user.player_id)">History</div>
                     <div v-show="!user.isFavorite" class="favoriteToggle noselect addToFavorites" @click="updateFavorite(user, !user.isFavorite)">

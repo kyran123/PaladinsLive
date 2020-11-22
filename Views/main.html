@@ -84,6 +84,7 @@
                                 }
                                 if(user.isFavorite == null) user.isFavorite = false;
                             });
+                            console.log(data.players);
                             this.$store.commit("setSearchedUsers", data.players);
                         }
                     });

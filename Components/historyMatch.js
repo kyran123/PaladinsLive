@@ -46,8 +46,8 @@ const historyMatch = Vue.component('history-match', {
                                 <div class="textRight">{{(player.Damage_Taken < 1000) ? player.Damage_Player : (player.Damage_Player / 1000).toFixed(3)}}</div>
                             </div>
                             <div class="matchPlayerShielding">
-                                <div class="statText">Damage received:</div>
-                                <div class="textRight">{{(player.Damage_Mitigated < 1000) ? player.Damage_Mitigated : (player.Damage_Mitigated / 1000).toFixed(3)}}</div>
+                                <div class="statText">Received:</div>
+                                <div class="textRight">{{(player.Damage_Taken < 1000) ? player.Damage_Taken : (player.Damage_Taken / 1000).toFixed(3)}}</div>
                             </div>
                             <div class="matchPlayerShielding">
                                 <div class="statText">Shielding</div>
@@ -81,8 +81,8 @@ const historyMatch = Vue.component('history-match', {
                                 <div class="textRight">{{(player.Damage_Taken < 1000) ? player.Damage_Player : (player.Damage_Player / 1000).toFixed(3)}}</div>
                             </div>
                             <div class="matchPlayerShielding">
-                                <div class="statText">Damage received:</div>
-                                <div class="textRight">{{(player.Damage_Mitigated < 1000) ? player.Damage_Mitigated : (player.Damage_Mitigated / 1000).toFixed(3)}}</div>
+                                <div class="statText">Received:</div>
+                                <div class="textRight">{{(player.Damage_Taken < 1000) ? player.Damage_Taken : (player.Damage_Taken / 1000).toFixed(3)}}</div>
                             </div>
                             <div class="matchPlayerShielding">
                                 <div class="statText">Shielding</div>
