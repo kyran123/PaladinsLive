@@ -1,20 +1,41 @@
 {
   "name": "PaladinsLive",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A statistics tracker for the free multiplayer game Paladins.",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . paladinslive --platform=win32 --arch=x64"
+    "create-installer": "electron-builder"
+  },
+  "build": {
+    "appId": "PaladinsLive",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "Assets/Build/PLlarge.ico"
+    },
+    "nsis": {
+      "installerIcon": "Assets/Build/PL.ico",
+      "uninstallerIcon": "Assets/Build/PL.ico",
+      "uninstallDisplayName": "PaladinsLive",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "author": "Kyle Fransen",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "electron": "^9.0.3",
+    "electron-log": "^4.3.0",
     "electron-store": "^5.2.0",
     "md5": "^2.2.1",
-    "moment": "^2.26.0"
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "electron": "^9.0.3",
+    "electron-builder": "^22.9.1"
   }
 }

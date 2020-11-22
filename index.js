@@ -1,6 +1,7 @@
 //Require the electron important things
 const { app, BrowserWindow, globalShortcut, remote, electron } = require('electron');
 const ipcMain = require('electron').ipcMain;
+const logger = require("electron-log");
 let screen;
 
 
@@ -25,6 +26,7 @@ let mainWindow;
 
 //Loading window 
 function loadProgram() {
+	logger.info('[index.js] Starting program');
 	//Require path to get the preload file, which requires a absolute path
 	path = require('path');
 	//Calculate size of width and height
@@ -46,25 +48,30 @@ function loadProgram() {
 			preload: path.join(__dirname, '/Libraries/preload.js')
 		}
 	});
-	loadingWindow.loadFile("Views/Load.html");
+	logger.info('[index.js] Loading html file');
+	loadingWindow.loadFile(path.join(__dirname, '/Views/load.html'));
 	loadingWindow.on('closed', () => { loadingWindow = null; });
 	//When program is ready and loaded
 	loadingWindow.webContents.once('dom-ready', () => {
+		logger.info('[index.js] loading window ready');
 		//Call the load program requirements
 		loadProgramRequirements();
 		//If is in development
 		if(process.env.PRODUCTION) {
 			//Show dev tools
-			loadingWindow.webContents.openDevTools({ mode: "detach" });
+			loadingWindow.webContents.openDevTools();
 		}
 		setTimeout(() => {
 			//Check if user has stored his api key		
 			if(!userSettings.isAuthenticated()) {
+				logger.info('[index.js] user not authenticated, showing setup.');
 				//Show setup for api
 				ipcWrapper.showSetup();
 			} else {
+				logger.info('[index.js] user authenticated');
 				//continue starting program
 				userSettings.getSetting("auth", (res) => {
+					logger.info(`[index.js] received authentication data`);
 					if(res.result) paladinsAPI.user = res.setting;
 					showMainScreen();
 				});
@@ -80,18 +87,24 @@ function loadProgram() {
 function loadProgramRequirements() {
 	//Setup IPC communication class
 	ipcWrapper = require('./Controllers/IpcWrapper.js');
+	logger.info('[index.js] IPCwrapper instantiated');
 	//Start actually loading libraries and what not
 	//Require all libraries here
 	url = require('url');
+	logger.info('[index.js] url instantiated');
 	axios = require('axios');
+	logger.info('[index.js] axios instantiated');
 	dotenv = require('dotenv').config();
+	logger.info('[index.js] dotenv instantiated');
 
 
 	//Setup all controllers here
 	userSettings = require('./Controllers/UserSettings.js');
 	userSettings.initialize();
+	logger.info('[index.js] userSettings instantiated');
 
 	paladinsAPI = require('./Controllers/PaladinsAPI.js');
+	logger.info('[index.js] paladins API instantiated');
 
 	//Setup functions needed withint the ipc wrapper
 	ipcWrapper.authenticate = function(data) {
@@ -127,9 +140,11 @@ function loadProgramRequirements() {
 		ipcWrapper.getFavorites(event);
 	} 
 	ipcWrapper.paladins = paladinsAPI;
+	logger.info('[index.js] IPCwrapper initialized');
 }
 
 function showMainScreen() {
+	logger.info('[index.js] showMainScreen called');
 	//Create new window for the main screen
 	mainWindow = new BrowserWindow({
 		width: screen.bounds.width,
@@ -138,7 +153,7 @@ function showMainScreen() {
 		autoHideMenuBar: true,
 		resizable: true,
 		show: false,
-		icon: './Assets/Build/PL.ico',
+		icon: path.join(__dirname, '/Assets/Build/PL.ico'),
 		backgroundColor: '#1E1E1E',
 		webPreferences: {
 			nodeIntegration: false,
@@ -147,12 +162,13 @@ function showMainScreen() {
 			preload: path.join(__dirname, '/Libraries/preload.js')
 		}
 	});
+	logger.info('[index.js] loading main html file');
 	//Load html file for setup
-	mainWindow.loadFile('Views/main.html');
+	mainWindow.loadFile(path.join(__dirname, '/Views/main.html'));
 	//If is in development
 	if(process.env.PRODUCTION) {
 		//Show dev tools
-		mainWindow.webContents.openDevTools({ mode: "detach" });
+		mainWindow.webContents.openDevTools();
 	}
 	//In case the user closes the program before finishing setup
 	mainWindow.on('closed', () => {
@@ -180,6 +196,7 @@ function showMainScreen() {
 
 	//When the DOM has loaded
 	mainWindow.webContents.once('dom-ready', () => {
+		logger.info('[index.js] main window ready');
 		mainWindow.show();
 		if(loadingWindow) loadingWindow.close();
 	});
