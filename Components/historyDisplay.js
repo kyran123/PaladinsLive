@@ -78,7 +78,7 @@ const historyDisplay = Vue.component('history-display', {
                     }
                     .match-player-details {
                         display: grid;
-                        grid-template-columns: max-content 1fr max-content;
+                        grid-template-rows: max-content 1fr max-content;
                         grid-column-gap: 15px;
                     }
                     .team1collapsed {
@@ -117,13 +117,9 @@ const historyDisplay = Vue.component('history-display', {
                         display: grid;
                         grid-template-rows: max-content max-content;
                         grid-row-gap: 5px;
-                        padding-left: 20px;
-                        padding-bottom: 20px;
                         font-size: 1.1em;
                     }
                     .player-right-expanded {
-                        padding-right: 20px;
-                        padding-bottom: 20px;
                         font-size: 1.1em;
                         grid-row-gap: 5px;
                     }
@@ -154,7 +150,11 @@ const historyDisplay = Vue.component('history-display', {
                     }
                     .team1, .team2 {
                         display: grid;
-                        grid-template-columns: repeat(5, max-content);
+                        grid-template-columns: repeat(5, minmax(200px, 300px));
+                        grid-column-gap: 25px;
+                        padding: 20px;
+                        margin-left: auto;
+                        margin-right: auto;
                     }
                     .textRight {
                         text-align: right;
@@ -168,6 +168,12 @@ const historyDisplay = Vue.component('history-display', {
                         width: 1px;
                         margin-left: auto;
                         margin-right: auto;
+                    }
+                    .horizontalDivider {
+                        background: #999;
+                        height: 1px;
+                        margin-left: 20px;
+                        margin-right: 20px;
                     }
                 </style>
             `

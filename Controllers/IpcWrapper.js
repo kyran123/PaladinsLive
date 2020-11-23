@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const ipcMain = require('electron').ipcMain;
+const logger = require("electron-log");
 
 class wrapper {
     constructor() {
@@ -66,6 +67,8 @@ class wrapper {
             this.getFavorites(event);
         });
 
+        
+		logger.info('[IpcWrapper.js] Initialized');
     }
     getSpecifiedWindow(name) { return BrowserWindow.getAllWindows().forEach((window) => { if(window.name === name) return window; }); }
     showSetup() { BrowserWindow.getFocusedWindow().webContents.send("showSetup"); }

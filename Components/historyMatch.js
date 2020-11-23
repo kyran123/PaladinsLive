@@ -9,7 +9,7 @@ const historyMatch = Vue.component('history-match', {
                 <div class="match-won" v-if="match.isWon">Won</div>
                 <div class="match-lost" v-if="!match.isWon">Lost</div>
                 <div class="match-title">
-                    <div class="match-map">{{match.map}}</div>
+                    <div class="match-map">{{match.map.replace("Ranked","").replace("LIVE","")}}</div>
                     <div class="match-info">{{queue[match.mode]}} | {{Math.floor(match.duration / 60) + ':' + ('0' + Math.floor(match.duration % 60)).slice(-2)}}</div>
                 </div>
                 <div class="match-id">{{match.id}}</div>
@@ -64,7 +64,7 @@ const historyMatch = Vue.component('history-match', {
                         </div>
                     </div>
                 </div>
-                <div class="verticalDivider"></div>
+                <div class="horizontalDivider"></div>
                 <div class="team2">
                     <div v-for="player in players" v-if="player.TaskForce == 2" class="player-right-expanded">
                         <div class="player-history-details-top">
@@ -108,7 +108,8 @@ const historyMatch = Vue.component('history-match', {
                 424: 'Casual',
                 428: 'Ranked',
                 452: 'Onslaught',
-                469: 'Team deathmatch'
+                469: 'Team deathmatch',
+                486: 'Ranked'
             },
             collapsed: true
         }

@@ -1,6 +1,6 @@
 {
   "name": "PaladinsLive",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A statistics tracker for the free multiplayer game Paladins.",
   "main": "index.js",
   "scripts": {

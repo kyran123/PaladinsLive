@@ -1,6 +1,7 @@
 const axios = require('axios');
 const moment = require('moment');
 const md5 = require('md5');
+const logger = require("electron-log");
 
 let Match = require('../Models/Match.js');
 let Player = require('../Models/Player.js');
@@ -19,6 +20,7 @@ class PaladinsAPI {
             matchDetails: 'getmatchdetailsbatchJson',
             getPlayers: 'searchplayersJson'
         }
+        logger.info(`[PaladinsAPI.js] Initialized`);
     }
     //Session
     //Session is basically an id that identifies this machine for the api
@@ -39,7 +41,8 @@ class PaladinsAPI {
                 return resolve(true);
             })
             .catch((err) => {
-                console.log("[PaladinsAPI.js]:isSessionValid() error: " + err);
+                logger.warn('[PaladinsAPI.js]:isSessionValid error');
+                logger.warn(`[PaladinsAPI.js] ${err}`);
             });
         });
     }
@@ -57,7 +60,8 @@ class PaladinsAPI {
                 resolve(true);
             }
             catch (err) {
-                console.log("[PaladinsAPI.js]:getSessionIfNeeded() " + err);
+                logger.warn('[PaladinsAPI.js]:getSessionIfNeeded error');
+                logger.warn(`[PaladinsAPI.js] ${err}`);
                 reject();
             }            
         });
@@ -111,8 +115,8 @@ class PaladinsAPI {
             }
         }
         catch (err) {
-            console.dir(err, {depth: null});
-            console.log("[PaladinsAPI.js]:getLiveMatchData() " + err); 
+            logger.warn('[PaladinsAPI.js]:getLiveMatchData error');
+            logger.warn(`[PaladinsAPI.js] ${err}`);
         }
     }
     
@@ -133,7 +137,10 @@ class PaladinsAPI {
             ));
             //Get the player rank
             const player = await axios.get(`${this.apiLink}/${this.methods.player}/${this.user.devId}/${this.getSignature('getplayer')}/${this.session}/${this.timeStamp()}/${playerObj.id}`)
-                                    .catch((err) => { console.log("[PaladinsAPI.js]:getPlayerData() get player - error: " + err); });
+                                    .catch((err) => {
+                                        logger.warn('[PaladinsAPI.js]:getPlayerData error');
+                                        logger.warn(`[PaladinsAPI.js] ${err}`);
+                                    });
             //Get the player data in a JS object
             const PlayerJSobject = player.data[0];
             //In case there is a bot
@@ -225,7 +232,8 @@ class PaladinsAPI {
             playerObj.validate();
         }
         catch(err) {
-            console.log("[PaladinsAPI.js]:getPlayerData() " + err);
+            logger.warn('[PaladinsAPI.js]:getPlayerData error');
+            logger.warn(`[PaladinsAPI.js] ${err}`);
         }
     }
 
@@ -253,27 +261,7 @@ class PaladinsAPI {
                 if(lastId !== player.Match) {
                     lastId = player.Match;
                     matches.push(match);
-                    match = [];
-                }
-                if(parseInt(player.playerId) == playerId) {
-                    if(player.Win_Status == 'Winner') {
-                        isWon = true;
-                    } else {
-                        isWon = false;
-                    }
-                }
-                if(matchData.length == 0) {
-                    matchData.push({
-                        id: player.Match,
-                        user: playerId,
-                        isWon: isWon,
-                        duration: player.Time_In_Match_Seconds,
-                        map: player.Map_Game,
-                        mode: player.match_queue_id
-                    });
-                    isWon = false;
-                } else {
-                    if(player.Match !== matchData[matchData.length - 1].id) {
+                    if(matchData.length == 0) {
                         matchData.push({
                             id: player.Match,
                             user: playerId,
@@ -283,6 +271,26 @@ class PaladinsAPI {
                             mode: player.match_queue_id
                         });
                         isWon = false;
+                    } else {
+                        if(player.Match !== matchData[matchData.length - 1].id) {
+                            matchData.push({
+                                id: player.Match,
+                                user: playerId,
+                                isWon: isWon,
+                                duration: player.Time_In_Match_Seconds,
+                                map: player.Map_Game,
+                                mode: player.match_queue_id
+                            });
+                            isWon = false;
+                        }
+                    }
+                    match = [];
+                }
+                if(parseInt(player.playerId) == playerId) {
+                    if(player.Win_Status == 'Winner') {
+                        isWon = true;
+                    } else {
+                        isWon = false;
                     }
                 }
                 match.push(player);
@@ -291,7 +299,8 @@ class PaladinsAPI {
             callback({ result: true, history: matches, matchData: matchData });
         }
         catch(err) {
-            console.log("[PaladinsAPI.js]:getMatchHistory() " + err); 
+            logger.warn('[PaladinsAPI.js]:getMatchHistory error');
+            logger.warn(`[PaladinsAPI.js] ${err}`);
         }
     }
 
@@ -303,8 +312,8 @@ class PaladinsAPI {
             callback({ result: true, players: players.data });
         }
         catch(err) {
-            console.dir(err, {depth: null});
-            console.log("[PaladinsAPI.js]:getPlayers() " + err);
+            logger.warn('[PaladinsAPI.js]:getPlayers error');
+            logger.warn(`[PaladinsAPI.js] ${err}`);
         }
     }
 }
