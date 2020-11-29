@@ -96,14 +96,17 @@
                     });
                     window.API.receive("showLiveMatchData", (data) => {
                         console.log(data);
-                        this.$store.commit("setContentState", 'match');
-                        this.$store.commit("setLiveMatchData", data.match);
+                        if(data.result) {
+                            this.$store.commit("setContentState", 'match');
+                            this.$store.commit("setLiveMatchData", data.match);
+                        }
                     });
                     window.API.receive("showMatchHistoryData", (data) => {
                         console.log(data);
-                        this.$store.commit("setHistory", data.matchData);
-                        this.$store.commit("setHistoryMatches", data.history);
-                        this.$store.commit("setContentState", 'history');
+                        if(data.result) {
+                            this.$store.commit("setHistory", data.history);
+                            this.$store.commit("setContentState", 'history');
+                        }
                     });
                 }
             },
@@ -113,19 +116,14 @@
                     favorites: {},
                     contentState: '',
                     matchData: {},
-                    history: [],
-                    historyMatches: []
+                    history: []
                 },
                 getters: {
                     getSearchedUsers: (state) => { return state.searchedUsers },
                     getFavorites: (state) => { return state.favorites },
                     getContentState: (state) => { return state.contentState },
                     getLiveMatchData: (state) => { return state.matchData },
-                    getMatch: (state, index) => { 
-                        let matchData = state.history[index];
-                        matchData.players = state.history[index];
-                        return matchData;
-                    },
+                    getMatch: (state, index) => { return state.history[index] },
                     getAllMatches: (state) => { return state.history },
                     getPlayers: (state) => { return state.historyMatches }
                 },
@@ -134,8 +132,7 @@
                     setFavorites: (state, value) => { state.favorites = value },
                     setContentState: (state, value) => { state.contentState = value },
                     setLiveMatchData: (state, value) => { state.matchData = value },
-                    setHistory: (state, value) => { state.history = value },
-                    setHistoryMatches: (state, value) => { state.historyMatches = value }
+                    setHistory: (state, value) => { state.history = value }
                 }
             })
         })

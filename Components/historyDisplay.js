@@ -8,7 +8,7 @@ const historyDisplay = Vue.component('history-display', {
     },
     template: `
         <div class="history">
-            <history-match v-for="(match, index) in getHistory" :key="match.id" ref="historyMatch" :match="match" :players="getPlayers[index]"></history-match>
+            <history-match v-for="(match, index) in getHistory" :key="match.id" ref="historyMatch" :match="match"></history-match>
         </div>
     `,
     data() {
@@ -178,8 +178,7 @@ const historyDisplay = Vue.component('history-display', {
                 </style>
             `
         },
-        getHistory: function() { return this.$store.getters.getAllMatches },
-        getPlayers: function() { return this.$store.getters.getPlayers }
+        getHistory: function() { return this.$store.getters.getAllMatches }
     },
     mounted() {
         $('head').append(this.css);

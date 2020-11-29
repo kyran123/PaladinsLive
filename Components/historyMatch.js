@@ -2,7 +2,7 @@ import eventBus from '../Libraries/EventBus.js';
 
 const historyMatch = Vue.component('history-match', {
     name: 'history-match',
-    props: ['match', 'players'],
+    props: ['match'],
     template: `
         <div class="historyMatch" @click="setCollapse(!collapsed)">
             <div class="match-top-info">
@@ -17,13 +17,13 @@ const historyMatch = Vue.component('history-match', {
             <div class="match-player-details-collapsed" v-if="collapsed">
                 <div></div>
                 <div class="team1collapsed">
-                    <div v-for="player in players" v-if="player.TaskForce == 1" class="player-left">
+                    <div v-for="player in match.players" v-if="player.TaskForce == 1" class="player-left">
                         <div  :class="match.user == player.playerId ? 'highlightPlayer' : ''">{{player.playerName || "Hidden"}}</div>
                         <div class="championName">{{player.Reference_Name}}</div>
                     </div>
                 </div>
                 <div class="team2collapsed">
-                    <div v-for="player in players" v-if="player.TaskForce == 2" class="player-right">
+                    <div v-for="player in match.players" v-if="player.TaskForce == 2" class="player-right">
                         <div class="championName">{{player.Reference_Name}}</div>
                         <div  :class="match.user == player.playerId ? 'highlightPlayer' : ''">{{player.playerName || "Hidden"}}</div>
                     </div>
@@ -31,7 +31,7 @@ const historyMatch = Vue.component('history-match', {
             </div>
             <div class="match-player-details" v-if="!collapsed">
                 <div class="team1">
-                    <div v-for="player in players" v-if="player.TaskForce == 1" class="player-left-expanded">
+                    <div v-for="player in match.players" v-if="player.TaskForce == 1" class="player-left-expanded">
                         <div class="player-history-details-top">
                             <div  :class="match.user == player.playerId ? 'highlightPlayer' : ''">{{player.playerName || "Hidden"}}</div>
                             <div class="championName">{{player.Reference_Name}}</div>
@@ -66,7 +66,7 @@ const historyMatch = Vue.component('history-match', {
                 </div>
                 <div class="horizontalDivider"></div>
                 <div class="team2">
-                    <div v-for="player in players" v-if="player.TaskForce == 2" class="player-right-expanded">
+                    <div v-for="player in match.players" v-if="player.TaskForce == 2" class="player-right-expanded">
                         <div class="player-history-details-top">
                             <div class="championName">{{player.Reference_Name}}</div>
                             <div  :class="match.user == player.playerId ? 'highlightPlayer' : ''">{{player.playerName || "Hidden"}}</div>
