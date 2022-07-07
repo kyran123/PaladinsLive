@@ -32,7 +32,7 @@
     "electron-log": "^4.3.0",
     "electron-store": "^5.2.0",
     "md5": "^2.2.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "electron": "^9.0.3",
